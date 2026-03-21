@@ -3,1453 +3,949 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI 핀테크 사업 아이템 리서치 보고서</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<title>교통사고 데이터 분석 — Python 코드 스터디 가이드</title>
 <style>
-:root {
-  --bg: #0a0e1a;
-  --card: #111827;
-  --card-alt: #1a2236;
-  --accent1: #3b82f6;
-  --accent2: #8b5cf6;
-  --accent3: #06b6d4;
-  --accent4: #f59e0b;
-  --accent5: #ef4444;
-  --accent6: #10b981;
-  --text: #e2e8f0;
-  --text-dim: #94a3b8;
-  --text-bright: #f8fafc;
-  --grad1: linear-gradient(135deg, #3b82f6, #8b5cf6);
-  --grad2: linear-gradient(135deg, #06b6d4, #3b82f6);
-  --grad3: linear-gradient(135deg, #f59e0b, #ef4444);
-  --grad4: linear-gradient(135deg, #10b981, #06b6d4);
-}
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
-  line-height: 1.7;
-  overflow-x: hidden;
-}
-
-.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-
-/* HERO */
-.hero {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-  text-align: center;
-}
-
-.hero::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(ellipse at 30% 50%, rgba(59,130,246,0.15) 0%, transparent 50%),
-              radial-gradient(ellipse at 70% 50%, rgba(139,92,246,0.12) 0%, transparent 50%),
-              radial-gradient(ellipse at 50% 80%, rgba(6,182,212,0.08) 0%, transparent 50%);
-  animation: heroFloat 20s ease-in-out infinite;
-}
-
-@keyframes heroFloat {
-  0%, 100% { transform: translate(0, 0) rotate(0deg); }
-  33% { transform: translate(2%, -1%) rotate(1deg); }
-  66% { transform: translate(-1%, 2%) rotate(-1deg); }
-}
-
-.hero-content { position: relative; z-index: 1; }
-
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(59,130,246,0.15);
-  border: 1px solid rgba(59,130,246,0.3);
-  padding: 8px 20px;
-  border-radius: 100px;
-  font-size: 0.85rem;
-  color: var(--accent1);
-  margin-bottom: 32px;
-  letter-spacing: 0.5px;
-}
-
-.hero h1 {
-  font-family: 'Outfit', sans-serif;
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
-  font-weight: 900;
-  line-height: 1.15;
-  margin-bottom: 24px;
-  background: linear-gradient(135deg, #fff 20%, #3b82f6 50%, #8b5cf6 80%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.hero-sub {
-  font-size: 1.15rem;
-  color: var(--text-dim);
-  max-width: 700px;
-  margin: 0 auto 48px;
-}
-
-.hero-stats {
-  display: flex;
-  justify-content: center;
-  gap: 48px;
-  flex-wrap: wrap;
-}
-
-.hero-stat {
-  text-align: center;
-}
-
-.hero-stat-num {
-  font-family: 'Outfit', sans-serif;
-  font-size: 2.5rem;
-  font-weight: 800;
-  background: var(--grad1);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.hero-stat-label {
-  font-size: 0.85rem;
-  color: var(--text-dim);
-  margin-top: 4px;
-}
-
-/* SECTION */
-.section {
-  padding: 100px 0;
-  position: relative;
-}
-
-.section-header {
-  text-align: center;
-  margin-bottom: 64px;
-}
-
-.section-num {
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 3px;
-  color: var(--accent1);
-  margin-bottom: 12px;
-}
-
-.section-title {
-  font-family: 'Outfit', sans-serif;
-  font-size: clamp(1.8rem, 4vw, 2.8rem);
-  font-weight: 800;
-  color: var(--text-bright);
-  margin-bottom: 16px;
-}
-
-.section-desc {
-  color: var(--text-dim);
-  max-width: 600px;
-  margin: 0 auto;
-  font-size: 1rem;
-}
-
-/* METHOD CARDS */
-.methods-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-  gap: 24px;
-  margin-bottom: 80px;
-}
-
-.method-card {
-  background: var(--card);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 20px;
-  padding: 36px;
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.method-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-}
-
-.method-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 4px;
-}
-
-.method-card:nth-child(1)::before { background: var(--grad2); }
-.method-card:nth-child(2)::before { background: var(--grad1); }
-.method-card:nth-child(3)::before { background: var(--grad3); }
-
-.method-icon {
-  width: 56px; height: 56px;
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  margin-bottom: 20px;
-}
-
-.method-card:nth-child(1) .method-icon { background: rgba(6,182,212,0.15); color: var(--accent3); }
-.method-card:nth-child(2) .method-icon { background: rgba(59,130,246,0.15); color: var(--accent1); }
-.method-card:nth-child(3) .method-icon { background: rgba(245,158,11,0.15); color: var(--accent4); }
-
-.method-card h3 {
-  font-size: 1.3rem;
-  font-weight: 700;
-  margin-bottom: 12px;
-  color: var(--text-bright);
-}
-
-.method-card p {
-  color: var(--text-dim);
-  font-size: 0.95rem;
-}
-
-/* ITEM RESEARCH SECTIONS */
-.research-block {
-  margin-bottom: 80px;
-  background: var(--card);
-  border-radius: 24px;
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.05);
-}
-
-.research-header {
-  padding: 40px 40px 0;
-  display: flex;
-  align-items: flex-start;
-  gap: 24px;
-  flex-wrap: wrap;
-}
-
-.research-num {
-  flex-shrink: 0;
-  width: 48px; height: 48px;
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Outfit', sans-serif;
-  font-weight: 800;
-  font-size: 1.2rem;
-  color: #fff;
-}
-
-.research-header-text h2 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--text-bright);
-  margin-bottom: 6px;
-}
-
-.research-header-text .tag {
-  display: inline-block;
-  padding: 3px 12px;
-  border-radius: 100px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  margin-right: 6px;
-}
-
-.research-body { padding: 32px 40px 40px; }
-
-/* INFOGRAPHIC BARS */
-.info-bars {
-  margin: 28px 0;
-}
-
-.info-bar {
-  margin-bottom: 18px;
-}
-
-.info-bar-label {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 6px;
-  font-size: 0.9rem;
-}
-
-.info-bar-label span:first-child { color: var(--text); font-weight: 500; }
-.info-bar-label span:last-child { color: var(--accent1); font-weight: 700; font-family: 'Outfit', sans-serif; }
-
-.info-bar-track {
-  height: 10px;
-  background: rgba(255,255,255,0.06);
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.info-bar-fill {
-  height: 100%;
-  border-radius: 10px;
-  transition: width 1.5s ease-out;
-}
-
-/* STAT ROWS */
-.stat-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 16px;
-  margin: 28px 0;
-}
-
-.stat-box {
-  background: var(--card-alt);
-  border-radius: 16px;
-  padding: 24px;
-  text-align: center;
-  border: 1px solid rgba(255,255,255,0.04);
-}
-
-.stat-box-num {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.8rem;
-  font-weight: 800;
-  margin-bottom: 4px;
-}
-
-.stat-box-label {
-  font-size: 0.8rem;
-  color: var(--text-dim);
-}
-
-/* TIMELINE */
-.timeline {
-  position: relative;
-  padding-left: 32px;
-  margin: 28px 0;
-}
-
-.timeline::before {
-  content: '';
-  position: absolute;
-  left: 8px; top: 0;
-  width: 2px; height: 100%;
-  background: linear-gradient(to bottom, var(--accent1), var(--accent2), transparent);
-}
-
-.timeline-item {
-  position: relative;
-  margin-bottom: 24px;
-  padding-bottom: 4px;
-}
-
-.timeline-item::before {
-  content: '';
-  position: absolute;
-  left: -28px; top: 6px;
-  width: 12px; height: 12px;
-  border-radius: 50%;
-  background: var(--accent1);
-  border: 3px solid var(--bg);
-}
-
-.timeline-item h4 {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--text-bright);
-  margin-bottom: 4px;
-}
-
-.timeline-item p {
-  font-size: 0.88rem;
-  color: var(--text-dim);
-}
-
-/* DONUT CHARTS */
-.donut-row {
-  display: flex;
-  gap: 32px;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin: 32px 0;
-}
-
-.donut-item {
-  text-align: center;
-}
-
-.donut {
-  width: 120px; height: 120px;
-  border-radius: 50%;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 12px;
-}
-
-.donut-inner {
-  width: 80px; height: 80px;
-  border-radius: 50%;
-  background: var(--card);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Outfit', sans-serif;
-  font-weight: 800;
-  font-size: 1.1rem;
-  color: var(--text-bright);
-}
-
-.donut-label {
-  font-size: 0.82rem;
-  color: var(--text-dim);
-  max-width: 120px;
-}
-
-/* COMPARISON TABLE */
-.comp-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 8px;
-  margin: 28px 0;
-}
-
-.comp-table th {
-  text-align: left;
-  padding: 12px 16px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-dim);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.comp-table td {
-  padding: 16px;
-  background: var(--card-alt);
-  font-size: 0.9rem;
-}
-
-.comp-table tr td:first-child { border-radius: 12px 0 0 12px; }
-.comp-table tr td:last-child { border-radius: 0 12px 12px 0; }
-
-/* FLOW DIAGRAM */
-.flow {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin: 28px 0;
-  justify-content: center;
-}
-
-.flow-step {
-  background: var(--card-alt);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 14px;
-  padding: 16px 20px;
-  text-align: center;
-  min-width: 130px;
-  max-width: 160px;
-}
-
-.flow-step-icon {
-  font-size: 1.5rem;
-  margin-bottom: 8px;
-}
-
-.flow-step-text {
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--text);
-}
-
-.flow-arrow {
-  font-size: 1.2rem;
-  color: var(--accent1);
-}
-
-/* RADAR / SCORE */
-.score-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 12px;
-  margin: 28px 0;
-}
-
-.score-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: var(--card-alt);
-  border-radius: 12px;
-  padding: 14px 18px;
-}
-
-.score-dots {
-  display: flex;
-  gap: 4px;
-}
-
-.score-dot {
-  width: 10px; height: 10px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.1);
-}
-
-.score-dot.filled { background: var(--accent1); }
-
-.score-label {
-  font-size: 0.85rem;
-  color: var(--text);
-}
-
-/* KEYWORD TAGS */
-.keyword-cloud {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 20px 0;
-}
-
-.keyword-tag {
-  padding: 6px 14px;
-  border-radius: 100px;
-  font-size: 0.8rem;
-  font-weight: 500;
-  border: 1px solid;
-}
-
-/* INSIGHT BOX */
-.insight-box {
-  background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(139,92,246,0.08));
-  border: 1px solid rgba(59,130,246,0.2);
-  border-radius: 16px;
-  padding: 28px;
-  margin: 28px 0;
-}
-
-.insight-box h4 {
-  font-size: 1rem;
-  color: var(--accent1);
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.insight-box p {
-  font-size: 0.92rem;
-  color: var(--text);
-}
-
-/* CONCLUSION */
-.conclusion {
-  background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(139,92,246,0.1));
-  border-radius: 24px;
-  padding: 60px 48px;
-  text-align: center;
-  border: 1px solid rgba(59,130,246,0.15);
-  margin: 40px 0 80px;
-}
-
-.conclusion h2 {
-  font-family: 'Outfit', sans-serif;
-  font-size: 2rem;
-  font-weight: 800;
-  margin-bottom: 20px;
-  color: var(--text-bright);
-}
-
-.conclusion p {
-  color: var(--text-dim);
-  max-width: 650px;
-  margin: 0 auto;
-}
-
-/* PRIORITY MATRIX */
-.matrix {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-  margin: 32px 0;
-}
-
-.matrix-card {
-  border-radius: 16px;
-  padding: 28px;
-  position: relative;
-  overflow: hidden;
-}
-
-.matrix-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  opacity: 0.08;
-  border-radius: 16px;
-}
-
-.matrix-rank {
-  font-family: 'Outfit', sans-serif;
-  font-size: 3rem;
-  font-weight: 900;
-  opacity: 0.2;
-  position: absolute;
-  top: 12px; right: 20px;
-}
-
-.matrix-card h4 {
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin-bottom: 8px;
-  color: var(--text-bright);
-}
-
-.matrix-card p {
-  font-size: 0.85rem;
-  color: var(--text-dim);
-}
-
-.matrix-card .matrix-score {
-  margin-top: 12px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.6rem;
-  font-weight: 800;
-}
-
-/* MARKET SIZE VISUAL */
-.market-visual {
-  display: flex;
-  align-items: flex-end;
-  gap: 16px;
-  justify-content: center;
-  margin: 32px 0;
-  min-height: 200px;
-}
-
-.market-bar-wrap {
-  text-align: center;
-  flex: 1;
-  max-width: 120px;
-}
-
-.market-bar {
-  border-radius: 12px 12px 0 0;
-  margin: 0 auto 12px;
-  width: 60px;
-  position: relative;
-  transition: height 1s ease-out;
-}
-
-.market-bar-val {
-  position: absolute;
-  top: -28px;
-  left: 50%; transform: translateX(-50%);
-  font-family: 'Outfit', sans-serif;
-  font-weight: 700;
-  font-size: 0.85rem;
-  white-space: nowrap;
-}
-
-.market-bar-label {
-  font-size: 0.75rem;
-  color: var(--text-dim);
-}
-
-/* SEPARATOR */
-.sep {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
-  margin: 60px 0;
-}
-
-/* RESPONSIVE */
-@media (max-width: 768px) {
-  .research-header, .research-body { padding-left: 24px; padding-right: 24px; }
-  .hero-stats { gap: 24px; }
-  .flow { flex-direction: column; align-items: center; }
-  .flow-arrow { transform: rotate(90deg); }
-  .stat-row { grid-template-columns: repeat(2, 1fr); }
-}
-
-/* ICON BAR CHART */
-.icon-chart {
-  display: flex;
-  gap: 24px;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin: 28px 0;
-}
-
-.icon-chart-item {
-  text-align: center;
-  width: 100px;
-}
-
-.icon-chart-bar {
-  width: 40px;
-  margin: 0 auto 8px;
-  border-radius: 8px 8px 0 0;
-  position: relative;
-}
-
-.icon-chart-val {
-  font-family: 'Outfit', sans-serif;
-  font-weight: 700;
-  font-size: 0.9rem;
-  margin-bottom: 6px;
-}
-
-.icon-chart-label {
-  font-size: 0.7rem;
-  color: var(--text-dim);
-}
-
-/* SWOT-like Grid */
-.quad-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin: 28px 0;
-}
-
-.quad-cell {
-  padding: 20px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.06);
-}
-
-.quad-cell h5 {
-  font-size: 0.85rem;
-  font-weight: 700;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.quad-cell ul {
-  list-style: none;
-  padding: 0;
-}
-
-.quad-cell li {
-  font-size: 0.82rem;
-  color: var(--text-dim);
-  padding: 3px 0;
-  padding-left: 14px;
-  position: relative;
-}
-
-.quad-cell li::before {
-  content: '•';
-  position: absolute;
-  left: 0;
-  color: var(--accent1);
-}
-
-@media (max-width: 600px) {
-  .quad-grid { grid-template-columns: 1fr; }
-}
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Noto Sans KR',sans-serif; background:#f5f6fa; color:#2c3e50; line-height:1.75; }
+
+  /* ─── NAV ─── */
+  .sidebar {
+    position:fixed; top:0; left:0; width:280px; height:100vh;
+    background:linear-gradient(180deg,#1a1a2e 0%,#16213e 100%);
+    color:#ccc; overflow-y:auto; padding:20px 0; z-index:100;
+  }
+  .sidebar h2 { color:#fff; font-size:15px; padding:0 20px 15px; border-bottom:1px solid rgba(255,255,255,0.1); margin-bottom:10px; }
+  .sidebar .phase-title {
+    font-size:11px; color:#e94560; font-weight:700; text-transform:uppercase;
+    padding:12px 20px 4px; letter-spacing:1px;
+  }
+  .sidebar a {
+    display:block; color:#aab; text-decoration:none; font-size:12.5px;
+    padding:5px 20px 5px 30px; transition:all 0.2s;
+  }
+  .sidebar a:hover { background:rgba(255,255,255,0.06); color:#fff; }
+  .sidebar a .fnum { color:#e94560; font-weight:700; margin-right:6px; }
+
+  /* ─── MAIN ─── */
+  .main { margin-left:280px; padding:30px 40px 60px; max-width:900px; }
+
+  /* ─── 타이틀 ─── */
+  .hero {
+    background:linear-gradient(135deg,#0f3460,#16213e,#1a1a2e);
+    color:#fff; border-radius:16px; padding:40px; margin-bottom:30px;
+    position:relative; overflow:hidden;
+  }
+  .hero::after { content:''; position:absolute; top:-30%; right:-10%; width:250px; height:250px; border-radius:50%; background:rgba(233,69,96,0.08); }
+  .hero h1 { font-size:26px; font-weight:900; margin-bottom:6px; }
+  .hero .sub { color:#8eaccd; font-size:14px; }
+  .hero .badges { display:flex; gap:10px; flex-wrap:wrap; margin-top:15px; }
+  .hero .badge { background:rgba(255,255,255,0.1); padding:4px 14px; border-radius:20px; font-size:12px; color:#dde; }
+
+  /* ─── 페이즈 구분 ─── */
+  .phase-banner {
+    margin:35px 0 20px; padding:16px 22px; border-radius:12px;
+    color:#fff; font-weight:700; font-size:16px;
+  }
+  .phase-banner .phase-sub { font-size:12px; font-weight:400; opacity:0.8; margin-top:4px; }
+  .pb-load { background:linear-gradient(135deg,#3498db,#2980b9); }
+  .pb-explore { background:linear-gradient(135deg,#27ae60,#1e8449); }
+  .pb-preprocess { background:linear-gradient(135deg,#e67e22,#d35400); }
+  .pb-analyze { background:linear-gradient(135deg,#9b59b6,#8e44ad); }
+  .pb-viz { background:linear-gradient(135deg,#e94560,#c0392b); }
+  .pb-report { background:linear-gradient(135deg,#1a1a2e,#0f3460); }
+
+  /* ─── 파일 카드 ─── */
+  .file-card {
+    background:#fff; border-radius:12px; margin-bottom:18px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.05); overflow:hidden;
+  }
+  .fc-header {
+    display:flex; align-items:center; padding:16px 20px;
+    cursor:pointer; transition:background 0.2s;
+  }
+  .fc-header:hover { background:#f8f9fc; }
+  .fc-num {
+    min-width:42px; height:42px; border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:900; font-size:14px; color:#fff; margin-right:14px; flex-shrink:0;
+  }
+  .fc-info { flex:1; }
+  .fc-info h3 { font-size:14px; font-weight:700; margin-bottom:2px; }
+  .fc-info .fc-file { font-size:11px; color:#999; font-family:monospace; }
+  .fc-toggle { font-size:20px; color:#bbb; transition:transform 0.3s; }
+
+  .fc-body { display:none; padding:0 20px 20px; }
+  .fc-body.open { display:block; }
+
+  /* ─── 설명 섹션 ─── */
+  .explain-box {
+    background:#f0f7ff; border-left:4px solid #3498db;
+    border-radius:0 8px 8px 0; padding:14px 18px; margin:10px 0;
+  }
+  .explain-box.warn { background:#fff8e1; border-left-color:#e67e22; }
+  .explain-box.success { background:#e8f8f0; border-left-color:#27ae60; }
+  .explain-box.important { background:#fde8e8; border-left-color:#e94560; }
+  .explain-box h4 { font-size:13px; font-weight:700; margin-bottom:4px; }
+  .explain-box p { font-size:12.5px; color:#555; }
+
+  /* ─── 코드 블록 ─── */
+  .code-block {
+    background:#1e1e2e; border-radius:8px; padding:14px 18px;
+    margin:10px 0; overflow-x:auto; position:relative;
+  }
+  .code-block pre { color:#cdd6f4; font-size:12px; font-family:'Courier New',monospace; line-height:1.6; white-space:pre; }
+  .code-block .code-label {
+    position:absolute; top:6px; right:10px; background:rgba(255,255,255,0.1);
+    padding:2px 8px; border-radius:4px; font-size:10px; color:#89b4fa;
+  }
+  .code-comment { color:#6c7086; }
+  .code-keyword { color:#cba6f7; }
+  .code-string { color:#a6e3a1; }
+  .code-func { color:#89b4fa; }
+  .code-num { color:#fab387; }
+
+  /* ─── 흐름도 ─── */
+  .flow-row {
+    display:flex; align-items:center; gap:8px; margin:6px 0; flex-wrap:wrap;
+  }
+  .flow-step {
+    background:#eef; padding:6px 14px; border-radius:8px;
+    font-size:12px; font-weight:500; border:1px solid #dde;
+  }
+  .flow-arrow { color:#bbb; font-weight:700; }
+
+  /* ─── 용어 설명 ─── */
+  .term {
+    display:inline-block; border-bottom:2px dotted #3498db;
+    cursor:help; position:relative;
+  }
+  .term-box {
+    display:none; position:absolute; bottom:100%; left:0;
+    background:#1a1a2e; color:#fff; padding:8px 12px; border-radius:6px;
+    font-size:11px; width:250px; z-index:10; line-height:1.5;
+  }
+  .term:hover .term-box { display:block; }
+
+  .tag { display:inline-block; padding:2px 8px; border-radius:6px; font-size:10px; font-weight:700; }
+  .tag-lib { background:#e8f0fe; color:#2c5faa; }
+  .tag-out { background:#e8f8f0; color:#1e8449; }
+  .tag-key { background:#fde8e8; color:#c0392b; }
+
+  @media(max-width:768px) {
+    .sidebar { display:none; }
+    .main { margin-left:0; padding:20px; }
+  }
 </style>
 </head>
 <body>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-content">
-    <div class="hero-badge">📊 AI 핀테크 비즈니스 모델 리서치</div>
-    <h1>사업 아이템 발굴<br>체계적 탐색 리서치</h1>
-    <p class="hero-sub">CSV 데이터 11개 아이템을 분석하여, 5가지 체계적 탐색 방법 중 가장 적합한 3가지를 적용한 심층 리서치 보고서</p>
-    <div class="hero-stats">
-      <div class="hero-stat">
-        <div class="hero-stat-num">11</div>
-        <div class="hero-stat-label">분석 대상 아이템</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-num">3</div>
-        <div class="hero-stat-label">적용 탐색 방법</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-num">5</div>
-        <div class="hero-stat-label">핵심 산업 분야</div>
-      </div>
+<!-- ═══ SIDEBAR ═══ -->
+<div class="sidebar">
+  <h2>Python 코드 가이드</h2>
+
+  <div class="phase-title">Phase 1: 데이터 준비</div>
+  <a href="#f01"><span class="fnum">01</span>Google Drive 마운트</a>
+  <a href="#f02"><span class="fnum">02</span>데이터 불러오기</a>
+
+  <div class="phase-title">Phase 2: 데이터 탐색</div>
+  <a href="#f03"><span class="fnum">03</span>변수 항목 확인</a>
+  <a href="#f04"><span class="fnum">04</span>데이터 상세 검토</a>
+  <a href="#f05"><span class="fnum">05</span>수치형 기초통계</a>
+  <a href="#f06"><span class="fnum">06</span>범주형 기초통계</a>
+
+  <div class="phase-title">Phase 3: 데이터 전처리</div>
+  <a href="#f07"><span class="fnum">07</span>전처리 계획 수립</a>
+  <a href="#f08"><span class="fnum">08</span>결측치 처리</a>
+  <a href="#f09"><span class="fnum">09</span>이상치 처리</a>
+  <a href="#f10"><span class="fnum">10</span>데이터 타입 변환</a>
+  <a href="#f11"><span class="fnum">11</span>전처리 검증</a>
+  <a href="#f12"><span class="fnum">12</span>데이터 저장</a>
+  <a href="#f13"><span class="fnum">13</span>전처리 전·후 비교</a>
+
+  <div class="phase-title">Phase 4: 상관분석</div>
+  <a href="#f14"><span class="fnum">14</span>상관관계 분석</a>
+
+  <div class="phase-title">Phase 5: 시각화</div>
+  <a href="#f15"><span class="fnum">15</span>핵심변수 분포</a>
+  <a href="#f16"><span class="fnum">16</span>변수 간 상호작용</a>
+  <a href="#f17"><span class="fnum">17</span>종합 대시보드</a>
+  <a href="#f18"><span class="fnum">18</span>8페이지 PDF 생성</a>
+  <a href="#f19"><span class="fnum">19</span>밀도 증폭 효과</a>
+  <a href="#f20"><span class="fnum">20</span>차량유형 숨은 패턴</a>
+  <a href="#f21"><span class="fnum">21</span>복합 위험 점수</a>
+
+  <div class="phase-title">Phase 6: 종합 EDA 보고서</div>
+  <a href="#f22"><span class="fnum">22</span>Full EDA Part 1</a>
+  <a href="#f23"><span class="fnum">23</span>Full EDA Part 2</a>
+  <a href="#f24"><span class="fnum">24</span>Full EDA Part 3</a>
+</div>
+
+<!-- ═══ MAIN CONTENT ═══ -->
+<div class="main">
+
+<div class="hero">
+  <h1>교통사고 데이터 분석 — Python 코드 스터디 가이드</h1>
+  <div class="sub">24개 Python 파일의 역할, 핵심 코드, 처리 흐름을 한눈에 이해하기</div>
+  <div class="badges">
+    <span class="badge">24개 Python 파일</span>
+    <span class="badge">6단계 분석 파이프라인</span>
+    <span class="badge">Google Colab 기반</span>
+    <span class="badge">840건 교통사고 데이터</span>
+  </div>
+</div>
+
+<!-- ═══ 전체 흐름도 ═══ -->
+<div style="background:#fff; border-radius:12px; padding:24px; margin-bottom:30px; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+  <h3 style="margin-bottom:12px;">전체 분석 파이프라인 흐름</h3>
+  <div class="flow-row">
+    <div class="flow-step" style="background:#e8f0fe;">1. 데이터 준비<br><small style="color:#888;">파일 01~02</small></div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step" style="background:#e8f8f0;">2. 데이터 탐색<br><small style="color:#888;">파일 03~06</small></div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step" style="background:#fff3e0;">3. 전처리<br><small style="color:#888;">파일 07~13</small></div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step" style="background:#f3e8fd;">4. 상관분석<br><small style="color:#888;">파일 14</small></div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step" style="background:#fde8e8;">5. 시각화<br><small style="color:#888;">파일 15~21</small></div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step" style="background:#1a1a2e; color:#fff;">6. 종합 보고서<br><small style="color:#8eaccd;">파일 22~24</small></div>
+  </div>
+  <p style="font-size:12px; color:#888; margin-top:10px;">각 파일은 Google Colab에서 하나의 코드 셀로 순서대로 실행합니다. 앞 셀에서 만든 변수(df 등)가 뒤 셀에서 그대로 이어집니다.</p>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PHASE 1: 데이터 준비 -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="phase-banner pb-load" id="phase1">Phase 1: 데이터 준비
+  <div class="phase-sub">Google Drive 연결 → CSV 파일 로드 (파일 01~02)</div>
+</div>
+
+<!-- File 01 -->
+<div class="file-card" id="f01">
+  <div class="fc-header" onclick="toggle(this)">
+    <div class="fc-num" style="background:#3498db;">01</div>
+    <div class="fc-info">
+      <h3>Google Drive 마운트</h3>
+      <div class="fc-file">01_mount_google_drive.py</div>
+    </div>
+    <div class="fc-toggle">▼</div>
+  </div>
+  <div class="fc-body">
+    <div class="explain-box">
+      <h4>이 파일은 무엇을 하나요?</h4>
+      <p>Google Colab은 클라우드 컴퓨터입니다. 내 Google Drive에 저장된 데이터 파일을 사용하려면, 먼저 Drive를 Colab에 "연결(마운트)"해야 합니다. USB 메모리를 컴퓨터에 꽂는 것과 비슷합니다.</p>
+    </div>
+    <div class="code-block">
+      <span class="code-label">Python</span>
+      <pre><span class="code-comment"># 경고 메시지 숨기기 (분석에 불필요한 알림 제거)</span>
+<span class="code-keyword">import</span> warnings
+warnings.filterwarnings(<span class="code-string">'ignore'</span>)
+
+<span class="code-comment"># Google Drive를 Colab에 연결</span>
+<span class="code-keyword">from</span> google.colab <span class="code-keyword">import</span> drive
+drive.<span class="code-func">mount</span>(<span class="code-string">'/content/drive'</span>)
+
+<span class="code-comment"># 이제 /content/drive/MyDrive/ 경로로 내 Drive에 접근 가능</span></pre>
+    </div>
+    <div class="explain-box success">
+      <h4>실행 결과</h4>
+      <p>Google 계정 인증 후 "Mounted at /content/drive" 메시지가 나오면 성공입니다.</p>
+    </div>
+    <p style="font-size:12px; color:#999; margin-top:8px;">
+      <span class="tag tag-lib">google.colab</span> <span class="tag tag-lib">warnings</span>
+    </p>
+  </div>
+</div>
+
+<!-- File 02 -->
+<div class="file-card" id="f02">
+  <div class="fc-header" onclick="toggle(this)">
+    <div class="fc-num" style="background:#3498db;">02</div>
+    <div class="fc-info">
+      <h3>데이터 불러오기 (CSV → DataFrame)</h3>
+      <div class="fc-file">02_load_data.py</div>
+    </div>
+    <div class="fc-toggle">▼</div>
+  </div>
+  <div class="fc-body">
+    <div class="explain-box">
+      <h4>이 파일은 무엇을 하나요?</h4>
+      <p>Google Drive에 저장된 교통사고 CSV 파일을 읽어서 pandas의 <strong>DataFrame</strong>(표 형태 데이터)으로 변환합니다. 이후 모든 분석은 이 <code>df</code> 변수를 사용합니다.</p>
+    </div>
+    <div class="code-block">
+      <span class="code-label">Python</span>
+      <pre><span class="code-keyword">import</span> pandas <span class="code-keyword">as</span> pd
+
+<span class="code-comment"># CSV 파일 경로 지정</span>
+data_path = <span class="code-string">'/content/drive/MyDrive/대학원/.../data/dataset_traffic_accident.csv'</span>
+
+<span class="code-comment"># CSV → DataFrame 변환 (표 형태로 메모리에 로드)</span>
+df = pd.<span class="code-func">read_csv</span>(data_path)
+
+<span class="code-comment"># 데이터 크기 확인: 840행 × 11열</span>
+<span class="code-func">print</span>(f<span class="code-string">"행(건수): {df.shape[0]}, 열(변수): {df.shape[1]}"</span>)
+df.<span class="code-func">head</span>()  <span class="code-comment"># 처음 5행 미리보기</span></pre>
+    </div>
+    <div class="explain-box">
+      <h4>핵심 개념: DataFrame이란?</h4>
+      <p><strong>DataFrame</strong>은 엑셀 시트와 같은 2차원 표입니다. 행(row)은 각 사고 건수, 열(column)은 변수(날씨, 속도 등)를 의미합니다. <code>df</code>라는 이름으로 저장해두면 이후 모든 셀에서 사용할 수 있습니다.</p>
+    </div>
+    <p style="font-size:12px; color:#999; margin-top:8px;">
+      <span class="tag tag-lib">pandas</span>
+      <span class="tag tag-out">출력: 840행 × 11열</span>
+    </p>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PHASE 2: 데이터 탐색 -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="phase-banner pb-explore" id="phase2">Phase 2: 데이터 탐색 (EDA 기초)
+  <div class="phase-sub">어떤 데이터인지 파악하기 — 변수 종류, 분포, 기초통계 (파일 03~06)</div>
+</div>
+
+<!-- File 03 -->
+<div class="file-card" id="f03">
+  <div class="fc-header" onclick="toggle(this)">
+    <div class="fc-num" style="background:#27ae60;">03</div>
+    <div class="fc-info">
+      <h3>변수(컬럼) 항목 정보 확인</h3>
+      <div class="fc-file">03_check_variables.py</div>
+    </div>
+    <div class="fc-toggle">▼</div>
+  </div>
+  <div class="fc-body">
+    <div class="explain-box">
+      <h4>이 파일은 무엇을 하나요?</h4>
+      <p>데이터에 어떤 변수(열)들이 있는지, 각 변수의 데이터 타입은 무엇인지, 비어있는 값(결측치)은 몇 개인지 한눈에 파악합니다. 분석의 첫 번째 단계인 <strong>"데이터 파악"</strong>입니다.</p>
+    </div>
+    <div class="code-block">
+      <span class="code-label">Python</span>
+      <pre><span class="code-comment"># 모든 컬럼명 번호와 함께 출력</span>
+<span class="code-keyword">for</span> i, col <span class="code-keyword">in</span> <span class="code-func">enumerate</span>(df.columns):
+    <span class="code-func">print</span>(f<span class="code-string">"  {i+1}. {col}"</span>)
+
+<span class="code-comment"># 데이터 타입, 결측치 수, 메모리 사용량 종합 정보</span>
+df.<span class="code-func">info</span>()
+
+<span class="code-comment"># 결과: 11개 변수 확인</span>
+<span class="code-comment"># 수치형(int/float): Speed_Limit, Driver_Age 등</span>
+<span class="code-comment"># 범주형(object): Weather, Road_Type 등</span></pre>
+    </div>
+    <div class="explain-box warn">
+      <h4>여기서 발견한 것</h4>
+      <p>11개 변수 중 <strong>수치형 5개</strong>(숫자 데이터)와 <strong>범주형 6개</strong>(텍스트 카테고리)가 있음을 확인했습니다. 일부 변수에 결측치(비어있는 값)가 있다는 것도 이 단계에서 처음 파악됩니다.</p>
     </div>
   </div>
-</section>
+</div>
 
-<!-- SECTION 0: 탐색방법 개요 -->
-<section class="section">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-num">OVERVIEW</div>
-      <div class="section-title">5가지 체계적 탐색 방법과 선정 근거</div>
-      <p class="section-desc">존 케이스(John Case)의 체계적 아이템 발굴 프레임워크에서 11개 아이템에 가장 부합하는 3가지를 선정</p>
+<!-- File 04 -->
+<div class="file-card" id="f04">
+  <div class="fc-header" onclick="toggle(this)">
+    <div class="fc-num" style="background:#27ae60;">04</div>
+    <div class="fc-info">
+      <h3>데이터 상세 검토 (결측치 · 분포 · 이상값)</h3>
+      <div class="fc-file">04_detailed_review.py</div>
     </div>
-
-    <div class="methods-grid">
-      <div class="method-card">
-        <div class="method-icon">👥</div>
-        <h3>1. 소비자 니즈 분석 ✅</h3>
-        <p>고령화·1인가구 등 소비자의 미충족 니즈(Unmet Needs)에서 출발한 아이템이 전체의 <strong>64%</strong>를 차지. 간병보험, 노견케어, 자녀모니터링 등 소비자 페인포인트가 핵심 동인.</p>
-      </div>
-      <div class="method-card">
-        <div class="method-icon">🔬</div>
-        <h3>3. 기술변화 분석 ✅</h3>
-        <p>AI/NLP, IoT, 컴퓨터비전 등 <strong>기술 변곡점</strong>에서 비롯된 아이템이 <strong>100%</strong>. 모든 아이템이 AI 기반 혁신을 핵심으로 활용하며 기술변화가 사업화의 전제 조건.</p>
-      </div>
-      <div class="method-card">
-        <div class="method-icon">📈</div>
-        <h3>5. 메가트렌드 분석 ✅</h3>
-        <p>초고령사회 진입, AI 대중화, 개인화 소비 등 <strong>거시적 메가트렌드</strong>와 연계된 아이템이 <strong>82%</strong>. 장기적 시장 성장의 방향성과 일치하는 아이템 다수.</p>
-      </div>
+    <div class="fc-toggle">▼</div>
+  </div>
+  <div class="fc-body">
+    <div class="explain-box">
+      <h4>이 파일은 무엇을 하나요?</h4>
+      <p>각 변수를 더 깊이 들여다봅니다. 결측치가 정확히 몇 건인지, 각 범주형 변수에 어떤 값들이 있고 비율은 어떤지, 수치형 변수의 범위는 적절한지 등을 확인합니다.</p>
     </div>
+    <div class="code-block">
+      <span class="code-label">Python</span>
+      <pre><span class="code-comment"># 변수별 결측치 수와 비율(%) 계산</span>
+missing = df.<span class="code-func">isnull</span>().<span class="code-func">sum</span>()
+missing_pct = (missing / <span class="code-func">len</span>(df) * <span class="code-num">100</span>).<span class="code-func">round</span>(<span class="code-num">1</span>)
 
-    <!-- 미선정 방법 -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 700px; margin: 0 auto;">
-      <div style="background: var(--card); border-radius: 14px; padding: 20px; opacity: 0.6; border: 1px solid rgba(255,255,255,0.04);">
-        <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-dim); margin-bottom: 6px;">2. 기존 제품/서비스 분석</div>
-        <div style="font-size: 0.8rem; color: var(--text-dim);">경쟁 제품 개선형보다 신규 시장 창출형 아이템이 다수</div>
-      </div>
-      <div style="background: var(--card); border-radius: 14px; padding: 20px; opacity: 0.6; border: 1px solid rgba(255,255,255,0.04);">
-        <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-dim); margin-bottom: 6px;">4. 정부정책 분석</div>
-        <div style="font-size: 0.8rem; color: var(--text-dim);">정책 연계 가능성은 있으나 직접 동인은 아님</div>
-      </div>
+<span class="code-comment"># 범주형 변수별 값 분포 확인</span>
+<span class="code-keyword">for</span> col <span class="code-keyword">in</span> cat_cols:
+    <span class="code-func">print</span>(df[col].<span class="code-func">value_counts</span>())</pre>
     </div>
-
-    <div class="sep"></div>
-
-    <!-- 아이템 맵핑 차트 -->
-    <div class="section-header">
-      <div class="section-num">MAPPING</div>
-      <div class="section-title">아이템별 탐색방법 적합도</div>
-    </div>
-
-    <div style="overflow-x: auto;">
-      <table class="comp-table">
-        <thead>
-          <tr>
-            <th>아이템</th>
-            <th>소비자 니즈</th>
-            <th>기술변화</th>
-            <th>메가트렌드</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td style="font-weight: 600;">🧠 AI 인지저하 탐지 (간병보험)</td>
-            <td>⬛⬛⬛⬛⬛</td>
-            <td>⬛⬛⬛⬛⬛</td>
-            <td>⬛⬛⬛⬛⬛</td>
-          </tr>
-          <tr>
-            <td style="font-weight: 600;">💑 AI 매칭 시스템</td>
-            <td>⬛⬛⬛⬛⬜</td>
-            <td>⬛⬛⬛⬛⬛</td>
-            <td>⬛⬛⬛⬜⬜</td>
-          </tr>
-          <tr>
-            <td style="font-weight: 600;">🐕 노견 IoT 케어</td>
-            <td>⬛⬛⬛⬛⬛</td>
-            <td>⬛⬛⬛⬛⬜</td>
-            <td>⬛⬛⬛⬛⬜</td>
-          </tr>
-          <tr>
-            <td style="font-weight: 600;">🚗 고령 운전자 감지</td>
-            <td>⬛⬛⬛⬛⬛</td>
-            <td>⬛⬛⬛⬛⬛</td>
-            <td>⬛⬛⬛⬛⬛</td>
-          </tr>
-          <tr>
-            <td style="font-weight: 600;">🤟 수화 해석</td>
-            <td>⬛⬛⬛⬛⬜</td>
-            <td>⬛⬛⬛⬛⬛</td>
-            <td>⬛⬛⬛⬜⬜</td>
-          </tr>
-          <tr>
-            <td style="font-weight: 600;">👓 AI 패션 체크</td>
-            <td>⬛⬛⬛⬛⬜</td>
-            <td>⬛⬛⬛⬛⬛</td>
-            <td>⬛⬛⬛⬛⬜</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="explain-box important">
+      <h4>발견된 문제점 3가지</h4>
+      <p>① <strong>Weather</strong>에 30건 결측, <strong>Traffic_Density</strong>에 30건 결측, <strong>Driver_Experience</strong>에 10건 결측<br>
+      ② <strong>Speed_Limit</strong>에 최대값 300이라는 비현실적 이상치 존재<br>
+      ③ <strong>Driver_Age</strong>에 최소값 5세라는 도메인 오류 존재</p>
     </div>
   </div>
-</section>
+</div>
 
-<!-- =================== -->
-<!-- 탐색방법 1: 소비자 니즈 분석 -->
-<!-- =================== -->
-<section class="section" style="background: rgba(6,182,212,0.02);">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-num">METHOD 01</div>
-      <div class="section-title">소비자 니즈 분석</div>
-      <p class="section-desc">고령화·디지털 세대·반려동물 가족화 등 소비자 라이프스타일 변화에서 발견한 미충족 니즈</p>
+<!-- File 05 -->
+<div class="file-card" id="f05">
+  <div class="fc-header" onclick="toggle(this)">
+    <div class="fc-num" style="background:#27ae60;">05</div>
+    <div class="fc-info">
+      <h3>수치형 변수 기초통계 (평균·중위값·이상치 수)</h3>
+      <div class="fc-file">05_numeric_stats.py</div>
     </div>
-
-    <!-- 아이템 1: AI 인지저하 탐지 -->
-    <div class="research-block">
-      <div class="research-header">
-        <div class="research-num" style="background: var(--grad2);">01</div>
-        <div class="research-header-text">
-          <h2>AI 인지저하 탐지 + 간병보험 연계</h2>
-          <span class="tag" style="background: rgba(6,182,212,0.15); color: var(--accent3);">고령화</span>
-          <span class="tag" style="background: rgba(59,130,246,0.15); color: var(--accent1);">인슈어테크</span>
-          <span class="tag" style="background: rgba(139,92,246,0.15); color: var(--accent2);">AI 헬스케어</span>
-        </div>
-      </div>
-      <div class="research-body">
-        <p>스마트폰 사용 패턴(타이핑 속도, 단어 선택)이나 음성 분석을 통해 초기 인지 저하를 탐지하고, 간병보험 리스크 관리 및 예방 서비스와 연계하는 모델.</p>
-
-        <h4 style="margin-top: 24px; color: var(--accent3); font-size: 0.9rem;">📊 소비자 니즈 근거</h4>
-        <div class="stat-row">
-          <div class="stat-box">
-            <div class="stat-box-num" style="color: var(--accent3);">20.3%</div>
-            <div class="stat-box-label">2025 한국 고령화율</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-box-num" style="color: var(--accent1);">40.1%</div>
-            <div class="stat-box-label">2050 예상 고령화율</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-box-num" style="color: var(--accent2);">15억</div>
-            <div class="stat-box-label">2050 전세계 65세+</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-box-num" style="color: var(--accent4);">45.3%</div>
-            <div class="stat-box-label">AI 헬스케어 CAGR</div>
-          </div>
-        </div>
-
-        <h4 style="color: var(--accent3); font-size: 0.9rem;">📈 AI 헬스케어 시장 성장 전망</h4>
-        <div class="market-visual">
-          <div class="market-bar-wrap">
-            <div class="market-bar" style="height: 40px; background: var(--grad2);">
-              <div class="market-bar-val" style="color: var(--accent3);">$14.3B</div>
-            </div>
-            <div class="market-bar-label">2017</div>
-          </div>
-          <div class="market-bar-wrap">
-            <div class="market-bar" style="height: 80px; background: var(--grad2);">
-              <div class="market-bar-val" style="color: var(--accent3);">$158B</div>
-            </div>
-            <div class="market-bar-label">2023</div>
-          </div>
-          <div class="market-bar-wrap">
-            <div class="market-bar" style="height: 140px; background: var(--grad1);">
-              <div class="market-bar-val" style="color: var(--accent1);">$677B</div>
-            </div>
-            <div class="market-bar-label">2025</div>
-          </div>
-          <div class="market-bar-wrap">
-            <div class="market-bar" style="height: 200px; background: var(--grad1);">
-              <div class="market-bar-val" style="color: var(--accent2);">$1,818B</div>
-            </div>
-            <div class="market-bar-label">2030(E)</div>
-          </div>
-        </div>
-
-        <div class="insight-box">
-          <h4>💡 핵심 인사이트</h4>
-          <p>한국은 세계 최속도로 초고령사회에 진입하였으며, 인력 기반 돌봄 서비스만으로는 한계. AI 기반 인지저하 조기 탐지 + 보험 리스크 관리는 '예방형 인슈어테크'로서 블루오션. 보험사 신상품 출시 경쟁과 맞물려 B2B 수익모델 구축이 용이.</p>
-        </div>
-      </div>
+    <div class="fc-toggle">▼</div>
+  </div>
+  <div class="fc-body">
+    <div class="explain-box">
+      <h4>이 파일은 무엇을 하나요?</h4>
+      <p>숫자로 된 변수(Speed_Limit, Driver_Age 등)에 대해 최소값, 평균, 중위값, 최대값, 표준편차, 왜곡도, IQR 기반 이상치 수를 계산합니다.</p>
     </div>
+    <div class="code-block">
+      <span class="code-label">Python</span>
+      <pre><span class="code-keyword">from</span> scipy <span class="code-keyword">import</span> stats
 
-    <!-- 아이템 2: 고령운전자 감지 -->
-    <div class="research-block">
-      <div class="research-header">
-        <div class="research-num" style="background: var(--grad3);">08</div>
-        <div class="research-header-text">
-          <h2>고령 운전자 인지력 저하 감지 & 면허 반납 유도</h2>
-          <span class="tag" style="background: rgba(245,158,11,0.15); color: var(--accent4);">모빌리티</span>
-          <span class="tag" style="background: rgba(239,68,68,0.15); color: var(--accent5);">안전</span>
-          <span class="tag" style="background: rgba(59,130,246,0.15); color: var(--accent1);">IoT</span>
-        </div>
-      </div>
-      <div class="research-body">
-        <p>차량 OBD/센서 데이터로 고령 운전자의 운전 패턴을 분석, 인지력 저하 판단 시 면허 반납 권고 + 인센티브를 제공하는 서비스.</p>
-
-        <h4 style="margin-top: 24px; color: var(--accent4); font-size: 0.9rem;">🚨 고령 운전자 교통사고 현황</h4>
-        <div class="info-bars">
-          <div class="info-bar">
-            <div class="info-bar-label"><span>65세+ 사고 비중 (2023)</span><span>20.2%</span></div>
-            <div class="info-bar-track"><div class="info-bar-fill" style="width: 20.2%; background: var(--grad3);"></div></div>
-          </div>
-          <div class="info-bar">
-            <div class="info-bar-label"><span>65세+ 가해 운전 비율 (2024)</span><span>21.6%</span></div>
-            <div class="info-bar-track"><div class="info-bar-fill" style="width: 21.6%; background: var(--accent5);"></div></div>
-          </div>
-          <div class="info-bar">
-            <div class="info-bar-label"><span>교통사고 사망자 중 고령층 (2024)</span><span>51.5%</span></div>
-            <div class="info-bar-track"><div class="info-bar-fill" style="width: 51.5%; background: var(--accent5);"></div></div>
-          </div>
-          <div class="info-bar">
-            <div class="info-bar-label"><span>면허소지자당 사고율 (65세+ vs 전체)</span><span>+45%</span></div>
-            <div class="info-bar-track"><div class="info-bar-fill" style="width: 45%; background: var(--accent4);"></div></div>
-          </div>
-        </div>
-
-        <div class="stat-row">
-          <div class="stat-box">
-            <div class="stat-box-num" style="color: var(--accent5);">517만</div>
-            <div class="stat-box-label">고령 면허소지자 (2024)</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-box-num" style="color: var(--accent4);">983만</div>
-            <div class="stat-box-label">예상 (2050)</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-box-num" style="color: var(--accent5);">2.2%</div>
-            <div class="stat-box-label">면허 자진반납률</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-box-num" style="color: var(--accent3);">42,369</div>
-            <div class="stat-box-label">고령사고 건수/년</div>
-          </div>
-        </div>
-
-        <h4 style="color: var(--accent4); font-size: 0.9rem;">🔄 서비스 플로우</h4>
-        <div class="flow">
-          <div class="flow-step">
-            <div class="flow-step-icon">🚗</div>
-            <div class="flow-step-text">차량 OBD<br>센서 수집</div>
-          </div>
-          <div class="flow-arrow">→</div>
-          <div class="flow-step">
-            <div class="flow-step-icon">🧠</div>
-            <div class="flow-step-text">AI 운전패턴<br>분석</div>
-          </div>
-          <div class="flow-arrow">→</div>
-          <div class="flow-step">
-            <div class="flow-step-icon">⚠️</div>
-            <div class="flow-step-text">인지력 저하<br>감지</div>
-          </div>
-          <div class="flow-arrow">→</div>
-          <div class="flow-step">
-            <div class="flow-step-icon">📋</div>
-            <div class="flow-step-text">면허 반납<br>권고+인센티브</div>
-          </div>
-          <div class="flow-arrow">→</div>
-          <div class="flow-step">
-            <div class="flow-step-icon">🏥</div>
-            <div class="flow-step-text">보험사 리스크<br>데이터 연계</div>
-          </div>
-        </div>
-
-        <div class="insight-box">
-          <h4>💡 핵심 인사이트</h4>
-          <p>고령 운전자 사고가 매년 역대 최고치를 경신하는 반면 면허 자진반납률은 2.2%에 불과. 시청역 역주행 사고 이후 정책적 관심이 급증하여 정부·보험사 협업 기회 확대. 보험사 리스크 데이터 + 정부 정책(조건부 면허제)과 시너지 가능.</p>
-        </div>
-      </div>
+<span class="code-keyword">for</span> col <span class="code-keyword">in</span> num_cols:
+    data = df[col].<span class="code-func">dropna</span>()
+    Q1 = data.<span class="code-func">quantile</span>(<span class="code-num">0.25</span>)   <span class="code-comment"># 25% 지점</span>
+    Q3 = data.<span class="code-func">quantile</span>(<span class="code-num">0.75</span>)   <span class="code-comment"># 75% 지점</span>
+    IQR = Q3 - Q1               <span class="code-comment"># 사분위 범위</span>
+    lower = Q1 - <span class="code-num">1.5</span> * IQR     <span class="code-comment"># 이상치 하한</span>
+    upper = Q3 + <span class="code-num">1.5</span> * IQR     <span class="code-comment"># 이상치 상한</span>
+    outliers = ((data &lt; lower) | (data &gt; upper)).<span class="code-func">sum</span>()</pre>
     </div>
-
-    <!-- 아이템 3: 노견 케어 -->
-    <div class="research-block">
-      <div class="research-header">
-        <div class="research-num" style="background: var(--grad4);">06</div>
-        <div class="research-header-text">
-          <h2>IoT/카메라 기반 노견 상태 모니터링</h2>
-          <span class="tag" style="background: rgba(16,185,129,0.15); color: var(--accent6);">펫테크</span>
-          <span class="tag" style="background: rgba(59,130,246,0.15); color: var(--accent1);">IoT</span>
-          <span class="tag" style="background: rgba(6,182,212,0.15); color: var(--accent3);">시니어 확장</span>
-        </div>
-      </div>
-      <div class="research-body">
-        <p>카메라/센서로 노견의 상태를 실시간 모니터링, 이상행동 감지 시 알림 → 고령 시니어 돌봄으로 확장 가능한 플랫폼.</p>
-
-        <div class="quad-grid">
-          <div class="quad-cell" style="background: rgba(16,185,129,0.05);">
-            <h5 style="color: var(--accent6);">✅ 소비자 페인포인트</h5>
-            <ul>
-              <li>반려동물 고령화 (평균수명 증가)</li>
-              <li>맞벌이 가구 증가 → 돌봄 공백</li>
-              <li>반려동물 = 가족 인식 확대</li>
-              <li>노견 의료비 부담 증가</li>
-            </ul>
-          </div>
-          <div class="quad-cell" style="background: rgba(59,130,246,0.05);">
-            <h5 style="color: var(--accent1);">🚀 확장 가능성</h5>
-            <ul>
-              <li>시니어 낙상 감지로 확장</li>
-              <li>독거노인 이상 상태 알림</li>
-              <li>대리 산책 → GoPro 리포트</li>
-              <li>웨어러블 디바이스 연계</li>
-            </ul>
-          </div>
-          <div class="quad-cell" style="background: rgba(139,92,246,0.05);">
-            <h5 style="color: var(--accent2);">💰 수익 모델</h5>
-            <ul>
-              <li>구독형 SaaS (월 과금)</li>
-              <li>하드웨어 (센서/카메라) 판매</li>
-              <li>수의학 병원 제휴</li>
-              <li>펫 보험 데이터 연계</li>
-            </ul>
-          </div>
-          <div class="quad-cell" style="background: rgba(245,158,11,0.05);">
-            <h5 style="color: var(--accent4);">⚠️ 리스크</h5>
-            <ul>
-              <li>IoT 하드웨어 초기 투자</li>
-              <li>반려동물 행동 데이터 부족</li>
-              <li>가격 민감도 높은 소비자</li>
-              <li>경쟁 펫테크 서비스 다수</li>
-            </ul>
-          </div>
-        </div>
-      </div>
+    <div class="explain-box">
+      <h4>핵심 개념: IQR 이상치 탐지</h4>
+      <p><strong>IQR(사분위 범위)</strong> = 상위 25%값 - 하위 25%값. 이 범위의 1.5배를 벗어나는 값은 "이상치"로 봅니다. 예: Speed_Limit에서 29건의 이상치(최대 300)가 탐지되었습니다.</p>
     </div>
   </div>
-</section>
+</div>
 
-<!-- =================== -->
-<!-- 탐색방법 2: 기술변화 분석 -->
-<!-- =================== -->
-<section class="section">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-num">METHOD 02</div>
-      <div class="section-title">기술변화 분석</div>
-      <p class="section-desc">AI·NLP·컴퓨터비전·IoT 등 기술 변곡점이 가능하게 만든 새로운 비즈니스 기회</p>
+<!-- File 06 -->
+<div class="file-card" id="f06">
+  <div class="fc-header" onclick="toggle(this)">
+    <div class="fc-num" style="background:#27ae60;">06</div>
+    <div class="fc-info">
+      <h3>범주형 변수 기초통계 (빈도·비율)</h3>
+      <div class="fc-file">06_categorical_stats.py</div>
     </div>
-
-    <!-- 핵심 기술 매핑 -->
-    <h4 style="text-align: center; color: var(--accent1); font-size: 0.9rem; margin-bottom: 20px;">🔧 아이템별 핵심 기술 의존도</h4>
-    <div style="overflow-x: auto;">
-      <table class="comp-table">
-        <thead>
-          <tr>
-            <th>아이템</th>
-            <th>NLP</th>
-            <th>컴퓨터 비전</th>
-            <th>IoT/센서</th>
-            <th>추천 알고리즘</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td style="font-weight: 600;">AI 인지저하 탐지</td>
-            <td style="color: var(--accent6);">●●●</td>
-            <td style="color: var(--text-dim);">○○○</td>
-            <td style="color: var(--accent6);">●●○</td>
-            <td style="color: var(--text-dim);">○○○</td>
-          </tr>
-          <tr>
-            <td style="font-weight: 600;">AI 매칭 시스템</td>
-            <td style="color: var(--accent6);">●●●</td>
-            <td style="color: var(--text-dim);">○○○</td>
-            <td style="color: var(--text-dim);">○○○</td>
-            <td style="color: var(--accent6);">●●●</td>
-          </tr>
-          <tr>
-            <td style="font-weight: 600;">수화 해석</td>
-            <td style="color: var(--accent6);">●●○</td>
-            <td style="color: var(--accent6);">●●●</td>
-            <td style="color: var(--text-dim);">○○○</td>
-            <td style="color: var(--text-dim);">○○○</td>
-          </tr>
-          <tr>
-            <td style="font-weight: 600;">고령 운전자 감지</td>
-            <td style="color: var(--text-dim);">○○○</td>
-            <td style="color: var(--accent6);">●○○</td>
-            <td style="color: var(--accent6);">●●●</td>
-            <td style="color: var(--accent6);">●○○</td>
-          </tr>
-          <tr>
-            <td style="font-weight: 600;">AI 패션 체크</td>
-            <td style="color: var(--text-dim);">○○○</td>
-            <td style="color: var(--accent6);">●●●</td>
-            <td style="color: var(--accent6);">●●○</td>
-            <td style="color: var(--accent6);">●●●</td>
-          </tr>
-          <tr>
-            <td style="font-weight: 600;">판서 자동 정리</td>
-            <td style="color: var(--accent6);">●●●</td>
-            <td style="color: var(--accent6);">●●●</td>
-            <td style="color: var(--text-dim);">○○○</td>
-            <td style="color: var(--text-dim);">○○○</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="fc-toggle">▼</div>
+  </div>
+  <div class="fc-body">
+    <div class="explain-box">
+      <h4>이 파일은 무엇을 하나요?</h4>
+      <p>텍스트 카테고리 변수(Weather, Road_Type 등)의 각 값이 몇 번 등장하는지, 전체에서 몇 %를 차지하는지 표로 정리합니다.</p>
     </div>
-
-    <div class="sep"></div>
-
-    <!-- AI 매칭 시스템 상세 -->
-    <div class="research-block">
-      <div class="research-header">
-        <div class="research-num" style="background: var(--grad1);">02</div>
-        <div class="research-header-text">
-          <h2>AI 대화 기반 매칭 시스템 (나는솔로)</h2>
-          <span class="tag" style="background: rgba(59,130,246,0.15); color: var(--accent1);">AI 매칭</span>
-          <span class="tag" style="background: rgba(139,92,246,0.15); color: var(--accent2);">NLP</span>
-          <span class="tag" style="background: rgba(245,158,11,0.15); color: var(--accent4);">여행 확장</span>
-        </div>
-      </div>
-      <div class="research-body">
-        <p>단순 설문이 아닌 AI 챗봇과의 자연스러운 대화를 통해 성향을 파악하고 매칭하는 시스템. 연애 상담 + 여행 매칭으로 확장 가능.</p>
-
-        <h4 style="margin-top: 24px; color: var(--accent1); font-size: 0.9rem;">⚙️ 기술 변곡점 — 왜 지금 가능한가?</h4>
-        <div class="timeline">
-          <div class="timeline-item">
-            <h4>2023: 생성형 AI 대중화</h4>
-            <p>ChatGPT 등장 이후 자연스러운 대화 기반 프로파일링이 비로소 가능해짐. 기존 설문 기반 매칭의 한계를 돌파.</p>
-          </div>
-          <div class="timeline-item">
-            <h4>2024: NLP 감성분석 고도화</h4>
-            <p>대화 맥락에서 성격, 가치관, 감정 패턴을 추출하는 기술 성숙. MBTI 수준을 넘어선 다차원 프로파일링.</p>
-          </div>
-          <div class="timeline-item">
-            <h4>2025: 초개인화 AI 에이전트</h4>
-            <p>사용자별 맞춤형 AI 에이전트가 지속적으로 학습·대화하며 정밀 매칭 정확도 향상. 데이팅앱 시장의 패러다임 전환.</p>
-          </div>
-          <div class="timeline-item">
-            <h4>2026: 멀티모달 + 에이전트 결합</h4>
-            <p>음성·영상·텍스트를 통합 분석하는 멀티모달 AI 도입으로 비언어적 성향까지 파악 가능.</p>
-          </div>
-        </div>
-
-        <h4 style="color: var(--accent1); font-size: 0.9rem;">🔄 기존 vs AI 매칭 비교</h4>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0;">
-          <div style="background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.15); border-radius: 14px; padding: 20px;">
-            <h5 style="color: var(--accent5); font-size: 0.9rem; margin-bottom: 10px;">❌ 기존 데이팅 앱</h5>
-            <ul style="list-style: none; padding: 0;">
-              <li style="font-size: 0.85rem; color: var(--text-dim); padding: 4px 0;">• 사진·스펙 기반 스와이프</li>
-              <li style="font-size: 0.85rem; color: var(--text-dim); padding: 4px 0;">• 정적 프로필 설문</li>
-              <li style="font-size: 0.85rem; color: var(--text-dim); padding: 4px 0;">• 낮은 매칭 정확도</li>
-              <li style="font-size: 0.85rem; color: var(--text-dim); padding: 4px 0;">• 피로감·번아웃 유발</li>
-            </ul>
-          </div>
-          <div style="background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.15); border-radius: 14px; padding: 20px;">
-            <h5 style="color: var(--accent6); font-size: 0.9rem; margin-bottom: 10px;">✅ AI 대화 매칭</h5>
-            <ul style="list-style: none; padding: 0;">
-              <li style="font-size: 0.85rem; color: var(--text-dim); padding: 4px 0;">• 자연 대화 기반 성향 파악</li>
-              <li style="font-size: 0.85rem; color: var(--text-dim); padding: 4px 0;">• 다차원 동적 프로파일링</li>
-              <li style="font-size: 0.85rem; color: var(--text-dim); padding: 4px 0;">• 가치관 기반 정밀 매칭</li>
-              <li style="font-size: 0.85rem; color: var(--text-dim); padding: 4px 0;">• 연애 상담 → 수익 모델</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="insight-box">
-          <h4>💡 핵심 인사이트</h4>
-          <p>Z세대의 50%가 데이팅 앱을 '새로운 사람 만나기' 목적으로 사용하며, 인터랙티브하고 진정성 있는 경험을 선호. 기존 스와이프 피로감에 대한 대안으로 AI 대화 매칭은 차별화된 가치 제공. 여행 매칭·커뮤니티로의 확장이 수익 다각화의 핵심.</p>
-        </div>
-      </div>
+    <div class="code-block">
+      <span class="code-label">Python</span>
+      <pre><span class="code-keyword">for</span> col <span class="code-keyword">in</span> cat_cols:
+    freq = df[col].<span class="code-func">value_counts</span>()         <span class="code-comment"># 빈도</span>
+    pct = df[col].<span class="code-func">value_counts</span>(normalize=<span class="code-keyword">True</span>) * <span class="code-num">100</span>  <span class="code-comment"># 비율(%)</span>
+    missing = df[col].<span class="code-func">isnull</span>().<span class="code-func">sum</span>()      <span class="code-comment"># 결측치 수</span></pre>
     </div>
-
-    <!-- 수화 해석 -->
-    <div class="research-block">
-      <div class="research-header">
-        <div class="research-num" style="background: linear-gradient(135deg, #8b5cf6, #3b82f6);">07</div>
-        <div class="research-header-text">
-          <h2>실시간 수화 → 텍스트 변환 서비스</h2>
-          <span class="tag" style="background: rgba(139,92,246,0.15); color: var(--accent2);">접근성</span>
-          <span class="tag" style="background: rgba(59,130,246,0.15); color: var(--accent1);">컴퓨터비전</span>
-          <span class="tag" style="background: rgba(16,185,129,0.15); color: var(--accent6);">사회적 가치</span>
-        </div>
-      </div>
-      <div class="research-body">
-        <p>카메라로 수화 동작을 인식하여 실시간 텍스트 변환. 청각장애인 커뮤니케이션 접근성 혁신.</p>
-
-        <h4 style="margin-top: 24px; color: var(--accent2); font-size: 0.9rem;">⚙️ 기술 실현 가능성 평가</h4>
-        <div class="score-grid">
-          <div class="score-item">
-            <div class="score-dots">
-              <div class="score-dot filled"></div>
-              <div class="score-dot filled"></div>
-              <div class="score-dot filled"></div>
-              <div class="score-dot filled"></div>
-              <div class="score-dot"></div>
-            </div>
-            <div class="score-label">AI 영상인식 성숙도</div>
-          </div>
-          <div class="score-item">
-            <div class="score-dots">
-              <div class="score-dot filled"></div>
-              <div class="score-dot filled"></div>
-              <div class="score-dot filled"></div>
-              <div class="score-dot"></div>
-              <div class="score-dot"></div>
-            </div>
-            <div class="score-label">한국 수화 데이터셋</div>
-          </div>
-          <div class="score-item">
-            <div class="score-dots">
-              <div class="score-dot filled"></div>
-              <div class="score-dot filled"></div>
-              <div class="score-dot filled"></div>
-              <div class="score-dot filled"></div>
-              <div class="score-dot filled"></div>
-            </div>
-            <div class="score-label">사회적 임팩트</div>
-          </div>
-          <div class="score-item">
-            <div class="score-dots">
-              <div class="score-dot filled"></div>
-              <div class="score-dot filled"></div>
-              <div class="score-dot"></div>
-              <div class="score-dot"></div>
-              <div class="score-dot"></div>
-            </div>
-            <div class="score-label">수익화 용이성</div>
-          </div>
-          <div class="score-item">
-            <div class="score-dots">
-              <div class="score-dot filled"></div>
-              <div class="score-dot filled"></div>
-              <div class="score-dot filled"></div>
-              <div class="score-dot filled"></div>
-              <div class="score-dot"></div>
-            </div>
-            <div class="score-label">Real-time 추론 가능</div>
-          </div>
-          <div class="score-item">
-            <div class="score-dots">
-              <div class="score-dot filled"></div>
-              <div class="score-dot filled"></div>
-              <div class="score-dot filled"></div>
-              <div class="score-dot"></div>
-              <div class="score-dot"></div>
-            </div>
-            <div class="score-label">경쟁 서비스 부재</div>
-          </div>
-        </div>
-
-        <div class="insight-box">
-          <h4>💡 핵심 인사이트</h4>
-          <p>기술적으로 AI 영상 인식과 실시간 추론이 충분히 성숙한 단계. 수익모델이 약점이나 ESG/사회적 기업 프레임에서 정부보조금·공공기관 납품으로 접근 가능. 한국 수화 전용 데이터셋 구축이 진입장벽이자 경쟁우위.</p>
-        </div>
-      </div>
+    <div class="explain-box">
+      <h4>예시: Weather 변수</h4>
+      <p>Clear(맑음) 520건(64.2%), Rainy(비) 232건(28.6%), Foggy(안개) 등... 맑은 날이 가장 많고, 비 오는 날이 두 번째로 많습니다.</p>
     </div>
   </div>
-</section>
+</div>
 
-<!-- =================== -->
-<!-- 탐색방법 3: 메가트렌드 분석 -->
-<!-- =================== -->
-<section class="section" style="background: rgba(139,92,246,0.02);">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-num">METHOD 03</div>
-      <div class="section-title">메가트렌드 분석</div>
-      <p class="section-desc">초고령사회·AI 대중화·초개인화 등 거시 트렌드와의 정합성 검증</p>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PHASE 3: 전처리 -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="phase-banner pb-preprocess" id="phase3">Phase 3: 데이터 전처리
+  <div class="phase-sub">발견된 문제점 해결: 결측치 → 이상치 → 타입변환 → 검증 → 저장 (파일 07~13)</div>
+</div>
+
+<!-- File 07 -->
+<div class="file-card" id="f07">
+  <div class="fc-header" onclick="toggle(this)">
+    <div class="fc-num" style="background:#e67e22;">07</div>
+    <div class="fc-info">
+      <h3>전처리 계획 수립 (로드맵)</h3>
+      <div class="fc-file">07_preprocessing_plan.py</div>
     </div>
-
-    <!-- 3대 메가트렌드 -->
-    <h4 style="text-align: center; color: var(--accent2); font-size: 0.9rem; margin-bottom: 24px;">🌐 2025-2030 핵심 메가트렌드 × 아이템 연계</h4>
-
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 48px;">
-      <div style="background: linear-gradient(135deg, rgba(239,68,68,0.08), rgba(245,158,11,0.08)); border: 1px solid rgba(245,158,11,0.15); border-radius: 18px; padding: 28px;">
-        <div style="font-size: 2rem; margin-bottom: 12px;">🏥</div>
-        <h4 style="font-size: 1.1rem; color: var(--text-bright); margin-bottom: 8px;">메가트렌드 1: 초고령사회</h4>
-        <p style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 16px;">한국 2024.12 초고령사회 공식 진입. 2050년 고령화율 40.1% 전망.</p>
-        <div class="keyword-cloud">
-          <span class="keyword-tag" style="border-color: rgba(245,158,11,0.3); color: var(--accent4);">AI 인지저하 탐지</span>
-          <span class="keyword-tag" style="border-color: rgba(245,158,11,0.3); color: var(--accent4);">고령 운전자</span>
-          <span class="keyword-tag" style="border-color: rgba(245,158,11,0.3); color: var(--accent4);">유병자 매칭</span>
-          <span class="keyword-tag" style="border-color: rgba(245,158,11,0.3); color: var(--accent4);">노견→시니어 확장</span>
-        </div>
-      </div>
-
-      <div style="background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(139,92,246,0.08)); border: 1px solid rgba(59,130,246,0.15); border-radius: 18px; padding: 28px;">
-        <div style="font-size: 2rem; margin-bottom: 12px;">🤖</div>
-        <h4 style="font-size: 1.1rem; color: var(--text-bright); margin-bottom: 8px;">메가트렌드 2: AI 에이전트 시대</h4>
-        <p style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 16px;">2026년은 AI 에이전트가 실제 상용화 단계에 본격 진입하는 전환점.</p>
-        <div class="keyword-cloud">
-          <span class="keyword-tag" style="border-color: rgba(59,130,246,0.3); color: var(--accent1);">AI 대화 매칭</span>
-          <span class="keyword-tag" style="border-color: rgba(59,130,246,0.3); color: var(--accent1);">영어 학습 TTS</span>
-          <span class="keyword-tag" style="border-color: rgba(59,130,246,0.3); color: var(--accent1);">자녀 AI 모니터링</span>
-          <span class="keyword-tag" style="border-color: rgba(59,130,246,0.3); color: var(--accent1);">판서 자동 정리</span>
-        </div>
-      </div>
-
-      <div style="background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(6,182,212,0.08)); border: 1px solid rgba(16,185,129,0.15); border-radius: 18px; padding: 28px;">
-        <div style="font-size: 2rem; margin-bottom: 12px;">🎯</div>
-        <h4 style="font-size: 1.1rem; color: var(--text-bright); margin-bottom: 8px;">메가트렌드 3: 초개인화</h4>
-        <p style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 16px;">성향 진단 → 맞춤 솔루션 처방 방식이 2026 마케팅의 표준으로 자리잡는 추세.</p>
-        <div class="keyword-cloud">
-          <span class="keyword-tag" style="border-color: rgba(16,185,129,0.3); color: var(--accent6);">AI 패션 코디</span>
-          <span class="keyword-tag" style="border-color: rgba(16,185,129,0.3); color: var(--accent6);">퍼스널컬러 진단</span>
-          <span class="keyword-tag" style="border-color: rgba(16,185,129,0.3); color: var(--accent6);">맞춤형 영어 학습</span>
-          <span class="keyword-tag" style="border-color: rgba(16,185,129,0.3); color: var(--accent6);">AI 성향 매칭</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="sep"></div>
-
-    <!-- 종합 우선순위 매트릭스 -->
-    <div class="section-header">
-      <div class="section-num">PRIORITY</div>
-      <div class="section-title">종합 우선순위 평가</div>
-      <p class="section-desc">3가지 탐색방법(소비자 니즈 × 기술변화 × 메가트렌드) 교차 분석 결과</p>
-    </div>
-
-    <div class="matrix">
-      <div class="matrix-card" style="background: linear-gradient(135deg, rgba(59,130,246,0.12), rgba(139,92,246,0.08)); border: 1px solid rgba(59,130,246,0.2);">
-        <div class="matrix-rank" style="color: var(--accent1);">1</div>
-        <h4>🧠 AI 인지저하 탐지 + 간병보험</h4>
-        <p>소비자 니즈(초고령화) + 기술(NLP/음성AI) + 메가트렌드(고령사회) 3박자 완벽 부합. B2B 보험사 연계로 수익화 명확.</p>
-        <div class="matrix-score" style="color: var(--accent1);">종합 95점</div>
-      </div>
-      <div class="matrix-card" style="background: linear-gradient(135deg, rgba(245,158,11,0.1), rgba(239,68,68,0.06)); border: 1px solid rgba(245,158,11,0.2);">
-        <div class="matrix-rank" style="color: var(--accent4);">2</div>
-        <h4>🚗 고령 운전자 인지력 감지</h4>
-        <p>사회적 긴급성(사고 급증) + 기술(IoT/센서) + 정책 방향성 부합. 보험사 리스크 데이터로 즉시 수익화 가능.</p>
-        <div class="matrix-score" style="color: var(--accent4);">종합 90점</div>
-      </div>
-      <div class="matrix-card" style="background: linear-gradient(135deg, rgba(139,92,246,0.1), rgba(59,130,246,0.06)); border: 1px solid rgba(139,92,246,0.2);">
-        <div class="matrix-rank" style="color: var(--accent2);">3</div>
-        <h4>💑 AI 대화 매칭 시스템</h4>
-        <p>기술 변곡점(생성형AI) + 초개인화 트렌드 적합. 여행/커뮤니티 확장으로 플랫폼 성장 가능성 높음.</p>
-        <div class="matrix-score" style="color: var(--accent2);">종합 85점</div>
-      </div>
-      <div class="matrix-card" style="background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(6,182,212,0.06)); border: 1px solid rgba(16,185,129,0.15);">
-        <div class="matrix-rank" style="color: var(--accent6);">4</div>
-        <h4>👓 AI 패션 체크 (스마트글래스)</h4>
-        <p>초개인화 메가트렌드 부합. 컴퓨터비전+AR 기술 활용. 화장품/뷰티 확장성 우수하나 하드웨어 의존도 높음.</p>
-        <div class="matrix-score" style="color: var(--accent6);">종합 78점</div>
-      </div>
-      <div class="matrix-card" style="background: linear-gradient(135deg, rgba(6,182,212,0.08), rgba(16,185,129,0.06)); border: 1px solid rgba(6,182,212,0.15);">
-        <div class="matrix-rank" style="color: var(--accent3);">5</div>
-        <h4>🐕 노견 IoT 모니터링</h4>
-        <p>소비자 니즈 명확. 시니어 돌봄 확장이 핵심 가치. IoT 하드웨어 초기 투자가 진입장벽.</p>
-        <div class="matrix-score" style="color: var(--accent3);">종합 75점</div>
-      </div>
-      <div class="matrix-card" style="background: linear-gradient(135deg, rgba(139,92,246,0.06), rgba(59,130,246,0.04)); border: 1px solid rgba(139,92,246,0.12);">
-        <div class="matrix-rank" style="color: var(--text-dim);">6</div>
-        <h4>🤟 수화 해석 서비스</h4>
-        <p>사회적 가치 최상. 기술 실현 가능. 수익모델 구축 난이도가 핵심 과제. ESG/공공영역 접근 권장.</p>
-        <div class="matrix-score" style="color: var(--text-dim);">종합 70점</div>
-      </div>
-    </div>
-
-    <!-- 결론 -->
-    <div class="conclusion">
-      <h2>🎯 최종 제언</h2>
-      <p style="margin-bottom: 20px;">3가지 탐색방법 교차 분석 결과, <strong style="color: var(--accent1);">AI 인지저하 탐지 + 간병보험</strong>과 <strong style="color: var(--accent4);">고령 운전자 인지력 감지</strong>가 소비자 니즈·기술 성숙도·메가트렌드 3가지 모두에서 최고 점수를 받았습니다.</p>
-      <p style="margin-bottom: 20px;">특히 두 아이템은 <strong style="color: var(--accent2);">보험사 B2B 데이터 연계</strong>라는 공통 수익 모델을 공유하여 시너지 창출이 가능하며, 한국의 초고령사회 진입이라는 비가역적 메가트렌드 위에 놓여있어 장기적 시장 확대가 확실합니다.</p>
-      <p><strong style="color: var(--accent6);">AI 대화 매칭</strong>은 기술 변곡점 활용도가 높아 단기 MVP 출시에 유리하며, 여행·커뮤니티 확장을 통한 플랫폼 전략으로 성장 가능합니다.</p>
-    </div>
-
+    <div class="fc-toggle">▼</div>
   </div>
-</section>
+  <div class="fc-body">
+    <div class="explain-box">
+      <h4>이 파일은 무엇을 하나요?</h4>
+      <p>앞서 발견한 3가지 문제(결측치, 이상치, 타입오류)를 정리하고, 어떤 순서로 해결할지 <strong>전처리 로드맵</strong>을 작성합니다. 바로 코드를 작성하지 않고 계획을 먼저 세우는 것이 중요합니다.</p>
+    </div>
+    <div class="explain-box warn">
+      <h4>전처리 순서가 중요한 이유</h4>
+      <p>결측치를 먼저 채워야 이상치 계산(IQR)이 정확해지고, 이상치를 처리한 뒤에야 데이터 타입 변환이 안전합니다. <strong>순서: ① 결측치 → ② 이상치 → ③ 타입 변환 → ④ 검증 → ⑤ 저장</strong></p>
+    </div>
+  </div>
+</div>
 
-<footer style="text-align: center; padding: 40px; color: var(--text-dim); font-size: 0.8rem;">
-  AI 핀테크 비즈니스 모델 — 사업 아이템 체계적 탐색 리서치 보고서 | 2026.03 | TEAM-J : 이정로, 정영, 이진영
-</footer>
+<!-- File 08 -->
+<div class="file-card" id="f08">
+  <div class="fc-header" onclick="toggle(this)">
+    <div class="fc-num" style="background:#e67e22;">08</div>
+    <div class="fc-info">
+      <h3>전처리 1단계 — 결측치(빈 값) 처리</h3>
+      <div class="fc-file">08_step1_missing_values.py</div>
+    </div>
+    <div class="fc-toggle">▼</div>
+  </div>
+  <div class="fc-body">
+    <div class="explain-box">
+      <h4>이 파일은 무엇을 하나요?</h4>
+      <p>비어있는 70개의 값(Weather 30건, Traffic_Density 30건, Driver_Experience 10건)을 적절한 대체값으로 채웁니다.</p>
+    </div>
+    <div class="code-block">
+      <span class="code-label">Python</span>
+      <pre><span class="code-comment"># Weather(범주형) → 가장 많이 나오는 값(최빈값)으로 대체</span>
+df[<span class="code-string">'Weather'</span>].<span class="code-func">fillna</span>(df[<span class="code-string">'Weather'</span>].<span class="code-func">mode</span>()[<span class="code-num">0</span>], inplace=<span class="code-keyword">True</span>)
 
+<span class="code-comment"># Traffic_Density(수치형) → 중위값으로 대체</span>
+df[<span class="code-string">'Traffic_Density'</span>].<span class="code-func">fillna</span>(df[<span class="code-string">'Traffic_Density'</span>].<span class="code-func">median</span>(), inplace=<span class="code-keyword">True</span>)
+
+<span class="code-comment"># Driver_Experience(수치형) → 중위값으로 대체</span>
+df[<span class="code-string">'Driver_Experience'</span>].<span class="code-func">fillna</span>(df[<span class="code-string">'Driver_Experience'</span>].<span class="code-func">median</span>(), inplace=<span class="code-keyword">True</span>)</pre>
+    </div>
+    <div class="explain-box">
+      <h4>왜 최빈값/중위값을 사용하나요?</h4>
+      <p><strong>최빈값(Mode)</strong>: 범주형 변수에서 가장 흔한 값으로 대체 (Weather → "Clear"). <strong>중위값(Median)</strong>: 수치형 변수에서 극단값의 영향을 받지 않는 중간값으로 대체. 평균(Mean)보다 이상치에 강건합니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- File 09 -->
+<div class="file-card" id="f09">
+  <div class="fc-header" onclick="toggle(this)">
+    <div class="fc-num" style="background:#e67e22;">09</div>
+    <div class="fc-info">
+      <h3>전처리 2단계 — 이상치(극단값) 처리</h3>
+      <div class="fc-file">09_step2_outliers.py</div>
+    </div>
+    <div class="fc-toggle">▼</div>
+  </div>
+  <div class="fc-body">
+    <div class="explain-box">
+      <h4>이 파일은 무엇을 하나요?</h4>
+      <p>비현실적인 극단값을 합리적 범위로 잘라냅니다(클리핑). Speed_Limit 300 → 110, Driver_Age 5세 → 18세.</p>
+    </div>
+    <div class="code-block">
+      <span class="code-label">Python</span>
+      <pre><span class="code-comment"># Speed_Limit: IQR 상한(110) 초과 → 110으로 제한</span>
+Q1 = df[<span class="code-string">'Speed_Limit'</span>].<span class="code-func">quantile</span>(<span class="code-num">0.25</span>)
+Q3 = df[<span class="code-string">'Speed_Limit'</span>].<span class="code-func">quantile</span>(<span class="code-num">0.75</span>)
+upper = Q3 + <span class="code-num">1.5</span> * (Q3 - Q1)  <span class="code-comment"># = 110</span>
+df[<span class="code-string">'Speed_Limit'</span>] = df[<span class="code-string">'Speed_Limit'</span>].<span class="code-func">clip</span>(upper=upper)
+
+<span class="code-comment"># Driver_Age: 18세 미만 → 18세로 제한 (도메인 규칙)</span>
+df[<span class="code-string">'Driver_Age'</span>] = df[<span class="code-string">'Driver_Age'</span>].<span class="code-func">clip</span>(lower=<span class="code-num">18</span>)</pre>
+    </div>
+    <div class="explain-box">
+      <h4>핵심 개념: clip() = 클리핑</h4>
+      <p><strong>clip()</strong>은 "잘라내기"입니다. 예를 들어 <code>clip(upper=110)</code>은 110을 넘는 모든 값을 110으로 바꿉니다. 데이터를 삭제하지 않고 합리적 범위 안으로 끌어오는 방법입니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- File 10 -->
+<div class="file-card" id="f10">
+  <div class="fc-header" onclick="toggle(this)">
+    <div class="fc-num" style="background:#e67e22;">10</div>
+    <div class="fc-info">
+      <h3>전처리 3단계 — 데이터 타입 변환</h3>
+      <div class="fc-file">10_step3_dtype_convert.py</div>
+    </div>
+    <div class="fc-toggle">▼</div>
+  </div>
+  <div class="fc-body">
+    <div class="explain-box">
+      <h4>이 파일은 무엇을 하나요?</h4>
+      <p>결측치를 채운 후 소수점 타입(float64)으로 변해버린 Traffic_Density와 Driver_Experience를 정수(int64)로 되돌립니다.</p>
+    </div>
+    <div class="code-block">
+      <span class="code-label">Python</span>
+      <pre><span class="code-comment"># float64 → int64 변환</span>
+df[<span class="code-string">'Traffic_Density'</span>] = df[<span class="code-string">'Traffic_Density'</span>].<span class="code-func">astype</span>(<span class="code-string">'int64'</span>)
+df[<span class="code-string">'Driver_Experience'</span>] = df[<span class="code-string">'Driver_Experience'</span>].<span class="code-func">astype</span>(<span class="code-string">'int64'</span>)</pre>
+    </div>
+    <div class="explain-box">
+      <h4>왜 타입 변환이 필요하나요?</h4>
+      <p>Traffic_Density는 0(Low), 1(Medium), 2(High)라는 <strong>정수 코드</strong>입니다. 1.0, 2.0처럼 소수점이 붙으면 분석 시 잘못 해석될 수 있어서 정수로 변환합니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- File 11 -->
+<div class="file-card" id="f11">
+  <div class="fc-header" onclick="toggle(this)">
+    <div class="fc-num" style="background:#e67e22;">11</div>
+    <div class="fc-info">
+      <h3>전처리 4단계 — 전처리 검증</h3>
+      <div class="fc-file">11_step4_validation.py</div>
+    </div>
+    <div class="fc-toggle">▼</div>
+  </div>
+  <div class="fc-body">
+    <div class="explain-box">
+      <h4>이 파일은 무엇을 하나요?</h4>
+      <p>1~3단계 전처리가 <strong>제대로 적용됐는지 확인</strong>합니다. 결측치가 정말 0건인지, 이상치가 사라졌는지, 데이터 타입이 올바른지 최종 점검합니다.</p>
+    </div>
+    <div class="code-block">
+      <span class="code-label">Python</span>
+      <pre><span class="code-comment"># 결측치 검증: 모든 변수에서 0이어야 함</span>
+<span class="code-func">print</span>(df.<span class="code-func">isnull</span>().<span class="code-func">sum</span>())  <span class="code-comment"># 전부 0 → OK</span>
+
+<span class="code-comment"># 이상치 검증: Speed_Limit 최대값이 110 이하인지</span>
+<span class="code-func">print</span>(df[<span class="code-string">'Speed_Limit'</span>].<span class="code-func">max</span>())  <span class="code-comment"># 110 → OK</span>
+
+<span class="code-comment"># 타입 검증: Traffic_Density가 int64인지</span>
+<span class="code-func">print</span>(df.<span class="code-func">dtypes</span>)</pre>
+    </div>
+    <div class="explain-box success">
+      <h4>왜 검증이 중요한가요?</h4>
+      <p>전처리 실수가 이후 모든 분석 결과를 왜곡할 수 있습니다. "코드가 에러 없이 실행됐다"와 "올바르게 처리됐다"는 다른 문제입니다. 반드시 검증 단계를 거쳐야 합니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- File 12 -->
+<div class="file-card" id="f12">
+  <div class="fc-header" onclick="toggle(this)">
+    <div class="fc-num" style="background:#e67e22;">12</div>
+    <div class="fc-info">
+      <h3>전처리 5단계 — 전처리 완료 데이터 저장</h3>
+      <div class="fc-file">12_step5_save.py</div>
+    </div>
+    <div class="fc-toggle">▼</div>
+  </div>
+  <div class="fc-body">
+    <div class="explain-box">
+      <h4>이 파일은 무엇을 하나요?</h4>
+      <p>전처리가 완료된 깨끗한 데이터를 <strong>새 파일로 저장</strong>합니다. 원본 파일은 건드리지 않고 별도 파일(<code>_cleaned.csv</code>)로 보관합니다.</p>
+    </div>
+    <div class="code-block">
+      <span class="code-label">Python</span>
+      <pre><span class="code-comment"># 원본과 분리하여 새 파일로 저장</span>
+save_path = <span class="code-string">'...data/dataset_traffic_accident_cleaned.csv'</span>
+df.<span class="code-func">to_csv</span>(save_path, index=<span class="code-keyword">False</span>)
+<span class="code-func">print</span>(f<span class="code-string">"✅ 저장 완료: {save_path}"</span>)</pre>
+    </div>
+    <div class="explain-box success">
+      <h4>원본 보존 원칙</h4>
+      <p>원본 데이터는 절대 수정하지 않고, 항상 새 파일로 저장합니다. 나중에 전처리 방법을 바꾸고 싶을 때 원본에서 다시 시작할 수 있기 때문입니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- File 13 -->
+<div class="file-card" id="f13">
+  <div class="fc-header" onclick="toggle(this)">
+    <div class="fc-num" style="background:#e67e22;">13</div>
+    <div class="fc-info">
+      <h3>전처리 전·후 비교 요약</h3>
+      <div class="fc-file">13_before_after_comparison.py</div>
+    </div>
+    <div class="fc-toggle">▼</div>
+  </div>
+  <div class="fc-body">
+    <div class="explain-box">
+      <h4>이 파일은 무엇을 하나요?</h4>
+      <p>원본 데이터를 다시 불러와서, 전처리 전후를 나란히 비교합니다. 결측치 몇 건이 처리됐는지, 이상치가 얼마나 줄었는지, 통계값이 어떻게 바뀌었는지 보여줍니다.</p>
+    </div>
+    <div class="code-block">
+      <span class="code-label">Python</span>
+      <pre><span class="code-comment"># 원본 다시 불러오기</span>
+df_orig = pd.<span class="code-func">read_csv</span>(original_path)
+
+<span class="code-comment"># 전처리 전후 결측치 비교</span>
+comparison = pd.<span class="code-func">DataFrame</span>({
+    <span class="code-string">'Before'</span>: df_orig.<span class="code-func">isnull</span>().<span class="code-func">sum</span>(),
+    <span class="code-string">'After'</span>: df.<span class="code-func">isnull</span>().<span class="code-func">sum</span>()
+})</pre>
+    </div>
+    <div class="explain-box success">
+      <h4>비교 결과 요약</h4>
+      <p>결측치: 70건 → 0건, Speed_Limit 최대값: 300 → 110, Driver_Age 최소값: 5 → 18. 전처리가 성공적으로 완료되었음을 수치로 확인합니다.</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PHASE 4: 상관분석 -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="phase-banner pb-analyze" id="phase4">Phase 4: 상관관계 분석
+  <div class="phase-sub">변수들 사이의 관계 파악: 어떤 변수가 사고 심각도에 영향을 미치는가? (파일 14)</div>
+</div>
+
+<!-- File 14 -->
+<div class="file-card" id="f14">
+  <div class="fc-header" onclick="toggle(this)">
+    <div class="fc-num" style="background:#9b59b6;">14</div>
+    <div class="fc-info">
+      <h3>변수 간 상관관계 분석 (Pearson + Chi-Square + Cramer's V)</h3>
+      <div class="fc-file">14_correlation_analysis.py</div>
+    </div>
+    <div class="fc-toggle">▼</div>
+  </div>
+  <div class="fc-body">
+    <div class="explain-box">
+      <h4>이 파일은 무엇을 하나요?</h4>
+      <p>모든 변수와 타겟(사고 심각도) 사이의 관계 강도를 측정합니다. 수치형은 <strong>피어슨 상관계수(r)</strong>, 범주형은 <strong>카이제곱 검정 + Cramer's V</strong>를 사용합니다.</p>
+    </div>
+    <div class="code-block">
+      <span class="code-label">Python</span>
+      <pre><span class="code-comment"># 수치형: 피어슨 상관계수 행렬</span>
+corr_matrix = df[num_cols].<span class="code-func">corr</span>()
+
+<span class="code-comment"># 범주형: 카이제곱 검정 + Cramer's V</span>
+<span class="code-keyword">for</span> col <span class="code-keyword">in</span> cat_cols:
+    ct = pd.<span class="code-func">crosstab</span>(df[col], df[<span class="code-string">'Accident_Severity'</span>])
+    chi2, pval, dof, _ = stats.<span class="code-func">chi2_contingency</span>(ct)
+    n = ct.<span class="code-func">sum</span>().<span class="code-func">sum</span>()
+    cramers_v = np.<span class="code-func">sqrt</span>(chi2 / (n * (<span class="code-func">min</span>(ct.shape) - <span class="code-num">1</span>)))</pre>
+    </div>
+    <div class="explain-box">
+      <h4>핵심 개념 3가지</h4>
+      <p>
+        <strong>① 피어슨 상관계수 (r)</strong>: 두 숫자 변수 사이의 직선 관계. -1~+1 범위. 0에 가까울수록 무관계.<br>
+        <strong>② 카이제곱 검정</strong>: 범주형 변수 2개가 "독립인가?" 검증. p값이 0.05 미만이면 연관 있음.<br>
+        <strong>③ Cramer's V</strong>: 범주형 연관 강도. 0~1 범위. 높을수록 강한 관계.
+      </p>
+    </div>
+    <div class="explain-box important">
+      <h4>핵심 발견</h4>
+      <p><strong>사고 심각도 Top 4 변수:</strong> Road_Condition(V=0.57) > Weather(V=0.55) > Traffic_Density(r=0.44) > Speed_Limit(r=0.25)<br>
+      <strong>다중공선성 발견:</strong> Driver_Age × Driver_Experience 상관 r=0.9453 (거의 같은 정보)</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PHASE 5: 시각화 -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="phase-banner pb-viz" id="phase5">Phase 5: 시각화
+  <div class="phase-sub">분석 결과를 그래프로 표현 — 분포, 상호작용, 위험 패턴 (파일 15~21)</div>
+</div>
+
+<!-- File 15-17 -->
+<div class="file-card" id="f15">
+  <div class="fc-header" onclick="toggle(this)">
+    <div class="fc-num" style="background:#e94560;">15-17</div>
+    <div class="fc-info">
+      <h3>EDA 시각화 Part 1~3 (핵심변수 분포 · 상호작용 · 종합)</h3>
+      <div class="fc-file">15_eda_visualization_part1.py ~ 17_eda_visualization_part3.py</div>
+    </div>
+    <div class="fc-toggle">▼</div>
+  </div>
+  <div class="fc-body">
+    <div class="explain-box">
+      <h4>이 3개 파일은 무엇을 하나요?</h4>
+      <p><strong>Part 1</strong>: 핵심 변수(Traffic_Density, Speed_Limit, Weather, Road_Condition)의 분포를 히스토그램, 바 차트로 시각화<br>
+      <strong>Part 2</strong>: 변수 쌍의 상호작용 — Weather×Road_Condition 히트맵, Driver_Age×Experience 산점도<br>
+      <strong>Part 3</strong>: 모든 변수를 한눈에 비교하는 종합 대시보드</p>
+    </div>
+    <div class="code-block">
+      <span class="code-label">Python — 시각화 기본 패턴</span>
+      <pre><span class="code-keyword">import</span> matplotlib.pyplot <span class="code-keyword">as</span> plt
+<span class="code-keyword">import</span> seaborn <span class="code-keyword">as</span> sns
+
+<span class="code-comment"># 그래프 틀 만들기 (2행 2열 = 4개 그래프)</span>
+fig, axes = plt.<span class="code-func">subplots</span>(<span class="code-num">2</span>, <span class="code-num">2</span>, figsize=(<span class="code-num">14</span>, <span class="code-num">10</span>))
+
+<span class="code-comment"># 첫 번째 칸: 타겟 변수 분포 (바 차트)</span>
+sns.<span class="code-func">countplot</span>(data=df, x=<span class="code-string">'Accident_Severity'</span>, ax=axes[<span class="code-num">0</span>,<span class="code-num">0</span>])
+
+<span class="code-comment"># 히트맵: Weather × Road_Condition 교차표</span>
+ct = pd.<span class="code-func">crosstab</span>(df[<span class="code-string">'Weather'</span>], df[<span class="code-string">'Road_Condition'</span>])
+sns.<span class="code-func">heatmap</span>(ct, annot=<span class="code-keyword">True</span>, fmt=<span class="code-string">'d'</span>, cmap=<span class="code-string">'YlOrRd'</span>)
+
+plt.<span class="code-func">tight_layout</span>()
+plt.<span class="code-func">show</span>()</pre>
+    </div>
+    <div class="explain-box">
+      <h4>주요 라이브러리 설명</h4>
+      <p><strong>matplotlib</strong>: Python의 기본 그래프 라이브러리. 모든 종류의 차트를 만들 수 있음.<br>
+      <strong>seaborn</strong>: matplotlib 위에 만든 통계 시각화 라이브러리. 히트맵, 바이올린 플롯 등 더 예쁜 그래프를 쉽게 생성.</p>
+    </div>
+  </div>
+</div>
+
+<!-- File 18 -->
+<div class="file-card" id="f18">
+  <div class="fc-header" onclick="toggle(this)">
+    <div class="fc-num" style="background:#e94560;">18</div>
+    <div class="fc-info">
+      <h3>8페이지 종합 시각화 PDF 생성</h3>
+      <div class="fc-file">18_comprehensive_visualization.py</div>
+    </div>
+    <div class="fc-toggle">▼</div>
+  </div>
+  <div class="fc-body">
+    <div class="explain-box">
+      <h4>이 파일은 무엇을 하나요?</h4>
+      <p>앞선 개별 시각화들을 하나의 <strong>8페이지 PDF 보고서</strong>로 통합합니다. PdfPages를 사용하여 한 페이지씩 그래프를 추가하고 최종 PDF로 저장합니다.</p>
+    </div>
+    <div class="code-block">
+      <span class="code-label">Python — PdfPages 패턴</span>
+      <pre><span class="code-keyword">from</span> matplotlib.backends.backend_pdf <span class="code-keyword">import</span> PdfPages
+
+<span class="code-comment"># PDF 파일 열기</span>
+pdf = <span class="code-func">PdfPages</span>(<span class="code-string">'traffic_accident_visualization.pdf'</span>)
+
+<span class="code-comment"># 각 페이지 = 하나의 matplotlib figure</span>
+fig, ax = plt.<span class="code-func">subplots</span>(...)
+<span class="code-comment"># ... 그래프 그리기 ...</span>
+pdf.<span class="code-func">savefig</span>(fig)   <span class="code-comment"># PDF에 페이지 추가</span>
+plt.<span class="code-func">close</span>()
+
+pdf.<span class="code-func">close</span>()  <span class="code-comment"># PDF 파일 완성 (반드시 호출!)</span></pre>
+    </div>
+  </div>
+</div>
+
+<!-- File 19-21 -->
+<div class="file-card" id="f19">
+  <div class="fc-header" onclick="toggle(this)">
+    <div class="fc-num" style="background:#e94560;">19-21</div>
+    <div class="fc-info">
+      <h3>심층 시각화 3종 (밀도증폭 · 차량유형 · 복합위험)</h3>
+      <div class="fc-file">19_viz2_density_amplification.py ~ 21_viz7_risk_score.py</div>
+    </div>
+    <div class="fc-toggle">▼</div>
+  </div>
+  <div class="fc-body">
+    <div class="explain-box">
+      <h4>이 3개 파일은 무엇을 하나요?</h4>
+      <p>
+        <strong>파일 19</strong>: 교통밀도(Low/Med/High)별로 Weather×Road_Condition 히트맵을 나란히 보여줌 → 밀도가 높아질수록 사고율이 증폭되는 효과 시각화<br>
+        <strong>파일 20</strong>: 차량 유형(Car/Truck/Bus)이 전체적으로는 유의하지 않지만, 특정 조건(고속도로+고밀도)에서는 차이가 나타나는 숨겨진 패턴 발견<br>
+        <strong>파일 21</strong>: 4가지 위험 요인(악천후, 노면불량, 고밀도, 고속)을 점수화하여 누적 효과 시각화
+      </p>
+    </div>
+    <div class="explain-box important">
+      <h4>핵심 분석 기법: 복합 위험 점수</h4>
+      <p>각 사고에 0~4점의 "위험 점수"를 부여합니다. 예: 비(+1) + 젖은 노면(+1) + 고밀도(+1) + 고속(+1) = 4점. 점수별 심각 사고율을 비교하면 <strong>0점(5.1%) → 4점(82.8%)</strong>으로 위험이 누적됨을 확인할 수 있습니다.</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PHASE 6: 종합 보고서 -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="phase-banner pb-report" id="phase6">Phase 6: 종합 EDA 보고서 (Full EDA Report)
+  <div class="phase-sub">모든 분석을 17페이지 PDF로 통합 — 3개 셀로 나누어 실행 (파일 22~24)</div>
+</div>
+
+<div class="file-card" id="f22">
+  <div class="fc-header" onclick="toggle(this)">
+    <div class="fc-num" style="background:#1a1a2e;">22</div>
+    <div class="fc-info">
+      <h3>Full EDA Part 1 — 데이터 개요 + 분포 (Pages 1-5)</h3>
+      <div class="fc-file">22_full_eda_part1.py</div>
+    </div>
+    <div class="fc-toggle">▼</div>
+  </div>
+  <div class="fc-body">
+    <div class="explain-box">
+      <h4>Page 1</h4><p>데이터셋 개요: 840건, 11변수, 타겟 분포(71.5% vs 28.5%)</p>
+    </div>
+    <div class="explain-box">
+      <h4>Page 2</h4><p>수치형 변수 분포: 히스토그램 + 심각도별 박스플롯</p>
+    </div>
+    <div class="explain-box">
+      <h4>Page 3-4</h4><p>범주형 변수 빈도 분포(수평 바) + 범주별 심각 비율(스택 바)</p>
+    </div>
+    <div class="explain-box">
+      <h4>Page 5</h4><p>핵심 수치 변수(Traffic_Density, Speed_Limit) 심층 분석</p>
+    </div>
+    <div class="explain-box warn">
+      <h4>중요: pdf 객체가 열린 채로 유지됩니다</h4>
+      <p>이 셀에서 <code>pdf = PdfPages(...)</code>로 PDF 파일을 열고, Part 2·3에서 계속 페이지를 추가합니다. <strong>Part 3까지 모두 실행해야 PDF가 완성됩니다.</strong></p>
+    </div>
+  </div>
+</div>
+
+<div class="file-card" id="f23">
+  <div class="fc-header" onclick="toggle(this)">
+    <div class="fc-num" style="background:#1a1a2e;">23</div>
+    <div class="fc-info">
+      <h3>Full EDA Part 2 — 상관관계 + 상호작용 (Pages 6-10)</h3>
+      <div class="fc-file">23_full_eda_part2.py</div>
+    </div>
+    <div class="fc-toggle">▼</div>
+  </div>
+  <div class="fc-body">
+    <div class="explain-box">
+      <h4>Page 6</h4><p>피어슨 상관 히트맵 + Driver_Age×Experience 다중공선성 산점도</p>
+    </div>
+    <div class="explain-box">
+      <h4>Page 7</h4><p>전 변수 연관 강도 순위(|r| + Cramer's V) + 카이제곱 검정 결과 표</p>
+    </div>
+    <div class="explain-box">
+      <h4>Page 8</h4><p>Weather × Road_Condition 상호작용 히트맵 (빈도 + 심각 비율)</p>
+    </div>
+    <div class="explain-box">
+      <h4>Page 9-10</h4><p>Traffic_Density × Speed_Limit 교차 분석 + 밀도별 증폭 효과 패싯 히트맵</p>
+    </div>
+  </div>
+</div>
+
+<div class="file-card" id="f24">
+  <div class="fc-header" onclick="toggle(this)">
+    <div class="fc-num" style="background:#1a1a2e;">24</div>
+    <div class="fc-info">
+      <h3>Full EDA Part 3 — 심층분석 + 요약 + PDF 완성 (Pages 11-17)</h3>
+      <div class="fc-file">24_full_eda_part3.py</div>
+    </div>
+    <div class="fc-toggle">▼</div>
+  </div>
+  <div class="fc-body">
+    <div class="explain-box">
+      <h4>Page 11</h4><p>차량 유형별 숨겨진 패턴: 4단계 조건 심화 비교</p>
+    </div>
+    <div class="explain-box">
+      <h4>Page 12</h4><p>복합 위험 점수 4패널 대시보드 (점수별 비율, 건수, 개별 기여도, 구성)</p>
+    </div>
+    <div class="explain-box">
+      <h4>Page 13</h4><p>고위험 조합 Top 10: 가장 위험한 환경 조합 순위</p>
+    </div>
+    <div class="explain-box">
+      <h4>Page 14-16</h4><p>운전자 연령·경력 분석, 도로유형×시간대, 조명조건 분석</p>
+    </div>
+    <div class="explain-box">
+      <h4>Page 17</h4><p>종합 요약 대시보드: 핵심 발견·결론·권고사항</p>
+    </div>
+    <div class="explain-box success">
+      <h4>pdf.close() — PDF 완성!</h4>
+      <p>이 셀의 마지막에 <code>pdf.close()</code>가 호출되어 17페이지짜리 <code>traffic_accident_full_EDA_report.pdf</code>가 완성됩니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 용어 사전 ═══ -->
+<div style="background:#fff; border-radius:12px; padding:24px; margin-top:30px; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+  <h3 style="margin-bottom:14px;">주요 용어 사전</h3>
+  <table style="width:100%; font-size:13px; border-collapse:collapse;">
+    <tr><th style="background:#1a1a2e; color:#fff; padding:8px; text-align:left; width:180px;">용어</th><th style="background:#1a1a2e; color:#fff; padding:8px; text-align:left;">쉬운 설명</th></tr>
+    <tr><td style="padding:8px; border-bottom:1px solid #eee; font-weight:700;">DataFrame (df)</td><td style="padding:8px; border-bottom:1px solid #eee;">엑셀 시트와 같은 표 형태 데이터. 행=사고 건수, 열=변수</td></tr>
+    <tr><td style="padding:8px; border-bottom:1px solid #eee; font-weight:700;">결측치 (Missing Value)</td><td style="padding:8px; border-bottom:1px solid #eee;">비어있는 셀. 측정 실패, 입력 누락 등으로 발생</td></tr>
+    <tr><td style="padding:8px; border-bottom:1px solid #eee; font-weight:700;">이상치 (Outlier)</td><td style="padding:8px; border-bottom:1px solid #eee;">비정상적으로 크거나 작은 값. 예: 속도 제한 300km/h</td></tr>
+    <tr><td style="padding:8px; border-bottom:1px solid #eee; font-weight:700;">IQR (사분위 범위)</td><td style="padding:8px; border-bottom:1px solid #eee;">데이터의 중간 50%가 차지하는 범위. 이상치 기준선으로 사용</td></tr>
+    <tr><td style="padding:8px; border-bottom:1px solid #eee; font-weight:700;">Pearson 상관계수 (r)</td><td style="padding:8px; border-bottom:1px solid #eee;">두 숫자 변수의 직선 관계 강도. 1=완전 비례, -1=완전 반비례, 0=무관</td></tr>
+    <tr><td style="padding:8px; border-bottom:1px solid #eee; font-weight:700;">Cramer's V</td><td style="padding:8px; border-bottom:1px solid #eee;">범주형 변수 간 연관 강도. 0~1. 높을수록 강한 관련</td></tr>
+    <tr><td style="padding:8px; border-bottom:1px solid #eee; font-weight:700;">카이제곱 검정</td><td style="padding:8px; border-bottom:1px solid #eee;">"이 두 변수는 서로 관련 있는가?" 통계적으로 검증하는 방법</td></tr>
+    <tr><td style="padding:8px; border-bottom:1px solid #eee; font-weight:700;">클리핑 (Clipping)</td><td style="padding:8px; border-bottom:1px solid #eee;">극단값을 합리적 범위로 잘라내기. 데이터를 삭제하지 않고 보정</td></tr>
+    <tr><td style="padding:8px; border-bottom:1px solid #eee; font-weight:700;">다중공선성</td><td style="padding:8px; border-bottom:1px solid #eee;">두 변수가 거의 같은 정보를 담고 있는 상태. 모델에 둘 다 넣으면 문제 발생</td></tr>
+    <tr><td style="padding:8px; border-bottom:1px solid #eee; font-weight:700;">PdfPages</td><td style="padding:8px; border-bottom:1px solid #eee;">matplotlib에서 여러 그래프를 한 PDF 파일에 페이지별로 저장하는 도구</td></tr>
+  </table>
+</div>
+
+<div style="text-align:center; margin-top:30px; color:#aaa; font-size:12px;">
+  교통사고 데이터 분석 Python 코드 스터디 가이드 · 24개 파일 · 6단계 파이프라인
+</div>
+
+</div><!-- end .main -->
+
+<script>
+function toggle(header) {
+  const body = header.nextElementSibling;
+  const arrow = header.querySelector('.fc-toggle');
+  body.classList.toggle('open');
+  arrow.textContent = body.classList.contains('open') ? '▲' : '▼';
+}
+// 모든 카드 기본 닫힘
+</script>
 </body>
 </html>
