@@ -247,9 +247,9 @@ const nodes = [
 // curve: positive = curve right/down from midpoint, negative = left/up
 const edges = [
   // === Supply/Service (orange) ===
-  { from: 'owner',   to: 'child',   type: 's', label: '안전 리포트·알림',       curve: -20 },
-  { from: 'owner',   to: 'parent',  type: 's', label: 'Zero-Touch 모니터링',    curve: -20 },
-  { from: 'owner',   to: 'insurer', type: 's', label: 'UBI 데이터 API',         curve: -20 },
+  { from: 'owner',   to: 'child',   type: 's', label: '안전 리포트·알림',       curve: 40 ,labelT: 0.3},
+  { from: 'owner',   to: 'parent',  type: 's', label: 'Zero-Touch 모니터링',    curve: 40, labelT: 0.3 },
+  { from: 'owner',   to: 'insurer', type: 's', label: 'UBI 데이터 API',         curve: 40,labelT: 0.3 },
   { from: 'owner',   to: 'govt',    type: 's', label: '면허반납 대시보드',       curve: -20 },
   { from: 'aws',     to: 'owner',   type: 's', label: '클라우드 인프라',         curve: 40, labelT: 0.3 },
   { from: 'kakao',   to: 'owner',   type: 's', label: '알림 전송 API',          curve: 40, labelT: 0.3 },
@@ -259,9 +259,9 @@ const edges = [
   { from: 'govt',    to: 'parent',  type: 's', label: '면허반납 바우처',         curve: 0, dash: true },
 
   // === Revenue/Payment (blue) ===
-  { from: 'child',   to: 'owner',   type: 'r', label: '구독료 4,900~9,900/월',  curve: 20 },
-  { from: 'insurer', to: 'owner',   type: 'r', label: 'B2B 제휴 수수료',        curve: 20 },
-  { from: 'govt',    to: 'owner',   type: 'r', label: 'B2G 바우처 비용',        curve: 20 },
+  { from: 'child',   to: 'owner',   type: 'r', label: '구독료 4,900~9,900/월',  curve: -20 },
+  { from: 'insurer', to: 'owner',   type: 'r', label: 'B2B 제휴 수수료',        curve: -20 },
+  { from: 'govt',    to: 'owner',   type: 'r', label: 'B2G 바우처 비용',        curve: -20 },
   { from: 'owner',   to: 'aws',     type: 'r', label: '인프라 비용',            curve: -20, labelT: 0.3 },
   { from: 'owner',   to: 'kakao',   type: 'r', label: 'API 사용료',            curve: -20, labelT: 0.3 },
   { from: 'owner',   to: 'map',     type: 'r', label: 'API 라이선스',           curve: -20, labelT: 0.3 },
