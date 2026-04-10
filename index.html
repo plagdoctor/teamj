@@ -6,9 +6,7 @@
 <title>이해관계자 네트워크 구성도 — 가족 안심 운전 모니터링 앱</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap');
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   body {
     font-family: 'Noto Sans KR', sans-serif;
     background: #f0f4f8;
@@ -16,7 +14,6 @@
     padding: 30px 20px;
     user-select: none;
   }
-
   .container {
     max-width: 1500px;
     margin: 0 auto;
@@ -25,7 +22,6 @@
     box-shadow: 0 4px 24px rgba(0,0,0,0.08);
     overflow: hidden;
   }
-
   .header {
     background: linear-gradient(135deg, #1a3a5c 0%, #2c5f8a 100%);
     color: #fff;
@@ -39,21 +35,13 @@
   .header .badge {
     background: rgba(255,255,255,0.15);
     border: 1px solid rgba(255,255,255,0.3);
-    padding: 6px 16px;
-    border-radius: 8px;
-    font-size: 12px;
+    padding: 6px 16px; border-radius: 8px; font-size: 12px;
   }
-
   .legend-bar {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    padding: 12px 40px;
-    background: #f8fafc;
+    display: flex; align-items: center; gap: 24px;
+    padding: 12px 40px; background: #f8fafc;
     border-bottom: 1px solid #e2e8f0;
-    flex-wrap: wrap;
-    font-size: 12px;
-    color: #475569;
+    flex-wrap: wrap; font-size: 12px; color: #475569;
   }
   .legend-item { display: flex; align-items: center; gap: 6px; }
   .legend-line { width: 32px; height: 3px; border-radius: 2px; }
@@ -68,89 +56,55 @@
   }
   .legend-sep { width: 1px; height: 16px; background: #cbd5e1; }
   .drag-hint {
-    margin-left: auto;
-    background: #eef2ff;
-    color: #4f46e5;
-    padding: 4px 12px;
-    border-radius: 6px;
-    font-weight: 500;
-    font-size: 11px;
+    margin-left: auto; background: #eef2ff; color: #4f46e5;
+    padding: 4px 12px; border-radius: 6px; font-weight: 500; font-size: 11px;
   }
-
   .canvas-wrap {
-    position: relative;
-    width: 100%;
-    height: 700px;
+    position: relative; width: 100%; height: 820px;
     overflow: hidden;
-    background:
-      radial-gradient(circle at 1px 1px, #e2e8f0 1px, transparent 0);
+    background: radial-gradient(circle at 1px 1px, #e2e8f0 1px, transparent 0);
     background-size: 24px 24px;
     cursor: default;
   }
-
   svg.edges {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%; pointer-events: none;
   }
-
   .node {
-    position: absolute;
-    border-radius: 14px;
-    padding: 14px 18px;
-    text-align: center;
-    cursor: grab;
-    transition: box-shadow 0.15s;
-    z-index: 2;
-    min-width: 140px;
+    position: absolute; border-radius: 14px;
+    padding: 14px 18px; text-align: center;
+    cursor: grab; transition: box-shadow 0.15s;
+    z-index: 2; min-width: 130px;
   }
   .node:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.15); z-index: 10; }
   .node.dragging { cursor: grabbing; box-shadow: 0 10px 32px rgba(0,0,0,0.2); z-index: 20; opacity: 0.92; }
-  .node .icon { font-size: 30px; margin-bottom: 4px; }
+  .node .icon { font-size: 28px; margin-bottom: 4px; }
   .node .name { font-size: 14px; font-weight: 700; }
   .node .role { font-size: 11px; font-weight: 400; margin-top: 2px; }
   .node .detail { font-size: 10px; color: #64748b; margin-top: 2px; }
 
-  .node.business-owner {
-    background: #1a3a5c; color: #fff;
-    border: 2.5px solid #0f2640;
-  }
+  .node.business-owner { background: #1a3a5c; color: #fff; border: 2.5px solid #0f2640; }
   .node.business-owner .role { color: rgba(255,255,255,0.7); }
   .node.business-owner .detail { color: rgba(255,255,255,0.5); }
 
-  .node.customer {
-    background: #e0f2fe;
-    border: 2.5px solid #0ea5e9;
-  }
+  .node.customer { background: #e0f2fe; border: 2.5px solid #0ea5e9; }
   .node.customer .name { color: #0c4a6e; }
   .node.customer .role { color: #0369a1; }
 
-  .node.partner {
-    background: #f3e8ff;
-    border: 2.5px solid #8b5cf6;
-  }
+  .node.partner { background: #f3e8ff; border: 2.5px solid #8b5cf6; }
   .node.partner .name { color: #4c1d95; }
   .node.partner .role { color: #6d28d9; }
 
-  .node.supplier {
-    background: #fff7ed;
-    border: 2.5px solid #f97316;
-  }
+  .node.supplier { background: #fff7ed; border: 2.5px solid #f97316; }
   .node.supplier .name { color: #9a3412; }
   .node.supplier .role { color: #c2410c; }
 
-  /* Edge label */
   .edge-label {
-    position: absolute;
-    font-size: 10px;
-    font-weight: 500;
-    padding: 2px 6px;
-    border-radius: 4px;
-    white-space: nowrap;
-    pointer-events: none;
-    z-index: 1;
-    background: rgba(255,255,255,0.92);
+    position: absolute; font-size: 10px; font-weight: 500;
+    padding: 2px 7px; border-radius: 4px; white-space: nowrap;
+    pointer-events: none; z-index: 1;
+    background: rgba(255,255,255,0.95);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
   }
   .edge-label.supply { color: #9a3412; border: 1px solid #fed7aa; }
   .edge-label.revenue { color: #1d4ed8; border: 1px solid #bfdbfe; }
@@ -158,15 +112,12 @@
   .edge-label.family { color: #475569; border: 1px solid #cbd5e1; }
 
   .info-panel {
-    padding: 20px 40px 28px;
-    background: #f8fafc;
+    padding: 20px 40px 28px; background: #f8fafc;
     border-top: 1px solid #e2e8f0;
   }
   .info-panel h3 { font-size: 15px; font-weight: 700; color: #1a3a5c; margin-bottom: 14px; }
   .info-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 12px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px;
   }
   .info-card {
     background: #fff; border: 1px solid #e2e8f0;
@@ -180,11 +131,9 @@
   }
   .info-card-text h4 { font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 3px; }
   .info-card-text p { font-size: 11px; color: #64748b; line-height: 1.6; }
-
   .footer {
     text-align: center; padding: 14px;
-    font-size: 11px; color: #94a3b8;
-    border-top: 1px solid #e2e8f0;
+    font-size: 11px; color: #94a3b8; border-top: 1px solid #e2e8f0;
   }
 </style>
 </head>
@@ -258,14 +207,14 @@
         <div class="info-card-icon" style="background:#fff7ed;">☁️</div>
         <div class="info-card-text">
           <h4>AWS 클라우드 (Supplier)</h4>
-          <p><b>제공:</b> 클라우드 인프라<br><b>수취:</b> 인프라 사용 비용</p>
+          <p><b>제공:</b> 클라우드 인프라 (SageMaker, TimescaleDB)<br><b>수취:</b> 인프라 사용 비용</p>
         </div>
       </div>
       <div class="info-card">
-        <div class="info-card-icon" style="background:#fff7ed;">💬🗺️</div>
+        <div class="info-card-icon" style="background:#fff7ed;">💬🗺️📱</div>
         <div class="info-card-text">
-          <h4>카카오 / 지도 API (Supplier)</h4>
-          <p><b>제공:</b> 알림 API, 도로 제한속도<br><b>수취:</b> API 사용료 / 라이선스</p>
+          <h4>카카오 / 지도 API / 스마트폰 센서 (Supplier)</h4>
+          <p><b>제공:</b> 알림 API, 도로 제한속도, GPS·IMU·자이로 센서 데이터<br><b>수취:</b> API 사용료 / 라이선스</p>
         </div>
       </div>
     </div>
@@ -277,58 +226,61 @@
 </div>
 
 <script>
-// ─── Node definitions ───
+// ─── Nodes: spread out layout, suppliers on left/right sides ───
 const nodes = [
-  { id: 'owner',    x: 620, y: 310, cls: 'business-owner', icon: '🏢', name: '서비스 운영사',      role: 'Business Owner',          detail: '가족 안심 운전 모니터링 앱' },
-  { id: 'child',    x: 140, y: 180, cls: 'customer',       icon: '🧒', name: '자녀 (결제자)',      role: 'Customer / Payer',        detail: '40~50대' },
-  { id: 'parent',   x: 140, y: 460, cls: 'customer',       icon: '👴', name: '부모 (사용자)',      role: 'Customer / User',         detail: '65세+ 고령 운전자' },
-  { id: 'insurer',  x: 1100, y: 160, cls: 'partner',       icon: '🏦', name: '보험사',             role: 'Partner (B2B)',           detail: 'UBI 보험 상품' },
-  { id: 'govt',     x: 1100, y: 440, cls: 'partner',       icon: '🏛️', name: '지자체',            role: 'Partner (B2G)',           detail: '면허반납 행정' },
-  { id: 'aws',      x: 560, y: 50,  cls: 'supplier',       icon: '☁️', name: 'AWS 클라우드',      role: 'Supplier',               detail: '인프라' },
-  { id: 'kakao',    x: 340, y: 50,  cls: 'supplier',       icon: '💬', name: '카카오톡 API',       role: 'Supplier',               detail: '알림 전송' },
-  { id: 'map',      x: 800, y: 50,  cls: 'supplier',       icon: '🗺️', name: '지도/내비 API',     role: 'Supplier',               detail: '도로정보' },
-  { id: 'sensor',   x: 520, y: 580, cls: 'supplier',       icon: '📱', name: '스마트폰 센서',      role: 'Supplier',               detail: 'GPS·IMU·자이로' },
+  // Center
+  { id: 'owner',  x: 600, y: 370, cls: 'business-owner', icon: '🏢', name: '서비스 운영사',  role: 'Business Owner', detail: '가족 안심 운전 모니터링 앱' },
+  // Customers: left column
+  { id: 'child',  x: 80,  y: 240, cls: 'customer',  icon: '🧒', name: '자녀 (결제자)', role: 'Customer / Payer', detail: '40~50대' },
+  { id: 'parent', x: 80,  y: 520, cls: 'customer',  icon: '👴', name: '부모 (사용자)', role: 'Customer / User',  detail: '65세+ 고령 운전자' },
+  // Partners: right column
+  { id: 'insurer', x: 1140, y: 240, cls: 'partner', icon: '🏦', name: '보험사',       role: 'Partner (B2B)', detail: 'UBI 보험 상품' },
+  { id: 'govt',    x: 1140, y: 520, cls: 'partner', icon: '🏛️', name: '지자체',      role: 'Partner (B2G)', detail: '면허반납 행정' },
+  // Suppliers: top row spread wide + bottom
+  { id: 'kakao',  x: 240,  y: 30,  cls: 'supplier', icon: '💬', name: '카카오톡 API',  role: 'Supplier', detail: '알림 전송' },
+  { id: 'aws',    x: 590,  y: 30,  cls: 'supplier', icon: '☁️', name: 'AWS 클라우드', role: 'Supplier', detail: '인프라' },
+  { id: 'map',    x: 940,  y: 30,  cls: 'supplier', icon: '🗺️', name: '지도/내비 API', role: 'Supplier', detail: '도로정보' },
+  { id: 'sensor', x: 360,  y: 700, cls: 'supplier', icon: '📱', name: '스마트폰 센서', role: 'Supplier', detail: 'GPS·IMU·자이로' },
 ];
 
-// ─── Edge definitions ───
-// type: s=supply(orange), r=revenue(blue), d=data(green), g=grey-family
-// dash: true = dashed line
+// ─── Edges ───
+// curve: positive = curve right/down from midpoint, negative = left/up
 const edges = [
-  // Supply / Service (orange)
-  { from: 'owner',   to: 'child',   type: 's', label: '안전 리포트·알림',        offsetLabel: [0, -10] },
-  { from: 'owner',   to: 'parent',  type: 's', label: 'Zero-Touch 모니터링',     offsetLabel: [0, -10] },
-  { from: 'owner',   to: 'insurer', type: 's', label: 'UBI 데이터 API',          offsetLabel: [0, -10] },
-  { from: 'owner',   to: 'govt',    type: 's', label: '면허반납 대시보드',        offsetLabel: [0, -10] },
-  { from: 'aws',     to: 'owner',   type: 's', label: '클라우드 인프라',          offsetLabel: [10, 0] },
-  { from: 'kakao',   to: 'owner',   type: 's', label: '알림 전송 API',           offsetLabel: [0, 0] },
-  { from: 'map',     to: 'owner',   type: 's', label: '도로 제한속도',           offsetLabel: [0, 0] },
-  { from: 'insurer', to: 'parent',  type: 's', label: '보험료 할인 혜택', dash: true, offsetLabel: [10, 0] },
-  { from: 'govt',    to: 'parent',  type: 's', label: '면허반납 바우처',  dash: true, offsetLabel: [0, 10] },
+  // === Supply/Service (orange) ===
+  { from: 'owner',   to: 'child',   type: 's', label: '안전 리포트·알림',       curve: -20 },
+  { from: 'owner',   to: 'parent',  type: 's', label: 'Zero-Touch 모니터링',    curve: -20 },
+  { from: 'owner',   to: 'insurer', type: 's', label: 'UBI 데이터 API',         curve: -20 },
+  { from: 'owner',   to: 'govt',    type: 's', label: '면허반납 대시보드',       curve: -20 },
+  { from: 'aws',     to: 'owner',   type: 's', label: '클라우드 인프라',         curve: 20 },
+  { from: 'kakao',   to: 'owner',   type: 's', label: '알림 전송 API',          curve: 20 },
+  { from: 'map',     to: 'owner',   type: 's', label: '도로 제한속도',          curve: 20 },
+  { from: 'kakao',   to: 'child',   type: 's', label: '카카오톡 알림 전달',     curve: 0, dash: false },
+  { from: 'insurer', to: 'parent',  type: 's', label: '보험료 할인 혜택',       curve: 0, dash: true },
+  { from: 'govt',    to: 'parent',  type: 's', label: '면허반납 바우처',         curve: 0, dash: true },
 
-  // Revenue / Payment (blue)
-  { from: 'child',   to: 'owner',   type: 'r', label: '구독료 4,900~9,900/월',   offsetLabel: [0, 10] },
-  { from: 'insurer', to: 'owner',   type: 'r', label: 'B2B 제휴 수수료',         offsetLabel: [0, 10] },
-  { from: 'govt',    to: 'owner',   type: 'r', label: 'B2G 바우처 비용',         offsetLabel: [0, 10] },
-  { from: 'owner',   to: 'aws',     type: 'r', label: '인프라 비용',             offsetLabel: [-10, 0] },
-  { from: 'owner',   to: 'kakao',   type: 'r', label: 'API 사용료',             offsetLabel: [0, 0] },
-  { from: 'owner',   to: 'map',     type: 'r', label: 'API 라이선스',            offsetLabel: [0, 0] },
+  // === Revenue/Payment (blue) ===
+  { from: 'child',   to: 'owner',   type: 'r', label: '구독료 4,900~9,900/월',  curve: 20 },
+  { from: 'insurer', to: 'owner',   type: 'r', label: 'B2B 제휴 수수료',        curve: 20 },
+  { from: 'govt',    to: 'owner',   type: 'r', label: 'B2G 바우처 비용',        curve: 20 },
+  { from: 'owner',   to: 'aws',     type: 'r', label: '인프라 비용',            curve: -20 },
+  { from: 'owner',   to: 'kakao',   type: 'r', label: 'API 사용료',            curve: -20 },
+  { from: 'owner',   to: 'map',     type: 'r', label: 'API 라이선스',           curve: -20 },
 
-  // Data (green)
-  { from: 'parent',  to: 'owner',   type: 'd', label: '운전 데이터 (자동 수집)',  offsetLabel: [0, 10] },
-  { from: 'sensor',  to: 'parent',  type: 'd', label: 'GPS·가속도·자이로',       offsetLabel: [0, 0] },
+  // === Data (green) ===
+  { from: 'parent',  to: 'owner',   type: 'd', label: '운전 데이터 (자동 수집)', curve: 20 },
+  { from: 'sensor',  to: 'parent',  type: 'd', label: 'GPS·가속도·자이로',      curve: 0 },
 
-  // Family connection (grey, bidirectional)
-  { from: 'child',   to: 'parent',  type: 'g', label: '가족 소통·대화', dash: true, offsetLabel: [-14, 0] },
+  // === Family (grey) ===
+  { from: 'child',   to: 'parent',  type: 'g', label: '가족 소통·대화',          curve: 0, dash: true },
 ];
 
 // ─── Rendering ───
 const canvas = document.getElementById('canvas');
 const svgEl = document.getElementById('edgeSvg');
 const nodeEls = {};
-const edgeLines = [];
-const edgeLabelEls = [];
+const edgeObjs = [];
 
-// Create node DOMs
+// Create nodes
 nodes.forEach(n => {
   const div = document.createElement('div');
   div.className = `node ${n.cls}`;
@@ -337,164 +289,120 @@ nodes.forEach(n => {
     <div class="icon">${n.icon}</div>
     <div class="name">${n.name}</div>
     <div class="role">${n.role}</div>
-    <div class="detail">${n.detail}</div>
-  `;
+    <div class="detail">${n.detail}</div>`;
   div.style.left = n.x + 'px';
   div.style.top = n.y + 'px';
   canvas.appendChild(div);
   nodeEls[n.id] = { el: div, data: n };
 });
 
-// Create edges
-edges.forEach((e, i) => {
-  const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-  const colors = { s: '#f97316', r: '#2563eb', d: '#16a34a', g: '#94a3b8' };
-  const markers = { s: 'arr-s', r: 'arr-r', d: 'arr-d', g: 'arr-g' };
-  line.setAttribute('stroke', colors[e.type]);
-  line.setAttribute('stroke-width', e.type === 'g' ? '1.5' : '2.2');
-  line.setAttribute('marker-end', `url(#${markers[e.type]})`);
-  if (e.dash) line.setAttribute('stroke-dasharray', '7,4');
-  svgEl.appendChild(line);
-  edgeLines.push({ line, edge: e });
+// Create edges (using <path> for curves)
+const colors = { s: '#f97316', r: '#2563eb', d: '#16a34a', g: '#94a3b8' };
+const markers = { s: 'arr-s', r: 'arr-r', d: 'arr-d', g: 'arr-g' };
+const lblCls = { s: 'supply', r: 'revenue', d: 'data', g: 'family' };
 
-  // Edge label
+edges.forEach(e => {
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  path.setAttribute('stroke', colors[e.type]);
+  path.setAttribute('stroke-width', e.type === 'g' ? '1.5' : '2.2');
+  path.setAttribute('fill', 'none');
+  path.setAttribute('marker-end', `url(#${markers[e.type]})`);
+  if (e.dash) path.setAttribute('stroke-dasharray', '7,4');
+  svgEl.appendChild(path);
+
   const lbl = document.createElement('div');
-  const lblCls = { s: 'supply', r: 'revenue', d: 'data', g: 'family' };
   lbl.className = `edge-label ${lblCls[e.type]}`;
   lbl.textContent = e.label;
   canvas.appendChild(lbl);
-  edgeLabelEls.push({ el: lbl, edge: e });
+
+  edgeObjs.push({ path, lbl, edge: e });
 });
 
 function getCenter(id) {
   const el = nodeEls[id].el;
-  const x = parseFloat(el.style.left) + el.offsetWidth / 2;
-  const y = parseFloat(el.style.top) + el.offsetHeight / 2;
-  return { x, y };
-}
-
-function getEdgeEndpoints(fromId, toId) {
-  const from = getCenter(fromId);
-  const to = getCenter(toId);
-  const fromEl = nodeEls[fromId].el;
-  const toEl = nodeEls[toId].el;
-
-  // Shrink line to stop at node border (rect approximation)
-  const dx = to.x - from.x;
-  const dy = to.y - from.y;
-  const dist = Math.sqrt(dx * dx + dy * dy);
-  if (dist === 0) return { x1: from.x, y1: from.y, x2: to.x, y2: to.y };
-
-  const ux = dx / dist;
-  const uy = dy / dist;
-
-  // Approximate border intersection using half-width/half-height
-  function borderDist(el, ux, uy) {
-    const hw = el.offsetWidth / 2 + 4;
-    const hh = el.offsetHeight / 2 + 4;
-    const ax = Math.abs(ux);
-    const ay = Math.abs(uy);
-    if (ax < 0.001) return hh;
-    if (ay < 0.001) return hw;
-    return Math.min(hw / ax, hh / ay);
-  }
-
-  const dFrom = borderDist(fromEl, ux, uy);
-  const dTo = borderDist(toEl, -ux, -uy);
-
   return {
-    x1: from.x + ux * dFrom,
-    y1: from.y + uy * dFrom,
-    x2: to.x - ux * dTo,
-    y2: to.y - uy * dTo
+    x: parseFloat(el.style.left) + el.offsetWidth / 2,
+    y: parseFloat(el.style.top) + el.offsetHeight / 2
   };
 }
 
-// For edges that share same two nodes, offset them
-function getEdgeOffset(edge, idx) {
-  // Find all edges between same pair (regardless of direction)
-  const pairKey = [edge.from, edge.to].sort().join('-');
-  const siblings = edges.filter(e => [e.from, e.to].sort().join('-') === pairKey);
-  if (siblings.length <= 1) return { ox: 0, oy: 0 };
-  const myIdx = siblings.indexOf(edge);
-  const spread = 14;
-  const offset = (myIdx - (siblings.length - 1) / 2) * spread;
-  // perpendicular direction
-  const from = getCenter(edge.from);
-  const to = getCenter(edge.to);
-  const dx = to.x - from.x;
-  const dy = to.y - from.y;
-  const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-  return { ox: (-dy / dist) * offset, oy: (dx / dist) * offset };
+function borderIntersect(el, cx, cy, tx, ty) {
+  const hw = el.offsetWidth / 2 + 5;
+  const hh = el.offsetHeight / 2 + 5;
+  const dx = tx - cx, dy = ty - cy;
+  const dist = Math.sqrt(dx * dx + dy * dy);
+  if (dist === 0) return { x: cx, y: cy };
+  const ux = dx / dist, uy = dy / dist;
+  const ax = Math.abs(ux), ay = Math.abs(uy);
+  const d = (ax < 0.001) ? hh : (ay < 0.001) ? hw : Math.min(hw / ax, hh / ay);
+  return { x: cx + ux * d, y: cy + uy * d };
 }
 
 function updateEdges() {
-  edgeLines.forEach(({ line, edge }, i) => {
-    const ep = getEdgeEndpoints(edge.from, edge.to);
-    const off = getEdgeOffset(edge, i);
-    line.setAttribute('x1', ep.x1 + off.ox);
-    line.setAttribute('y1', ep.y1 + off.oy);
-    line.setAttribute('x2', ep.x2 + off.ox);
-    line.setAttribute('y2', ep.y2 + off.oy);
-  });
+  edgeObjs.forEach(({ path, lbl, edge }) => {
+    const fc = getCenter(edge.from);
+    const tc = getCenter(edge.to);
 
-  edgeLabelEls.forEach(({ el, edge }) => {
-    const from = getCenter(edge.from);
-    const to = getCenter(edge.to);
-    const mx = (from.x + to.x) / 2 + (edge.offsetLabel?.[0] || 0);
-    const my = (from.y + to.y) / 2 + (edge.offsetLabel?.[1] || 0);
-    el.style.left = (mx - el.offsetWidth / 2) + 'px';
-    el.style.top = (my - el.offsetHeight / 2) + 'px';
+    // Border points
+    const fp = borderIntersect(nodeEls[edge.from].el, fc.x, fc.y, tc.x, tc.y);
+    const tp = borderIntersect(nodeEls[edge.to].el, tc.x, tc.y, fc.x, fc.y);
+
+    const mx = (fp.x + tp.x) / 2;
+    const my = (fp.y + tp.y) / 2;
+
+    // Perpendicular offset for curve
+    const dx = tp.x - fp.x, dy = tp.y - fp.y;
+    const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+    const curveAmt = edge.curve || 0;
+    const cx = mx + (-dy / dist) * curveAmt;
+    const cy = my + (dx / dist) * curveAmt;
+
+    // Quadratic bezier
+    path.setAttribute('d', `M ${fp.x} ${fp.y} Q ${cx} ${cy} ${tp.x} ${tp.y}`);
+
+    // Label at curve midpoint (t=0.5 on quadratic bezier)
+    const lx = 0.25 * fp.x + 0.5 * cx + 0.25 * tp.x;
+    const ly = 0.25 * fp.y + 0.5 * cy + 0.25 * tp.y;
+    lbl.style.left = (lx - lbl.offsetWidth / 2) + 'px';
+    lbl.style.top = (ly - lbl.offsetHeight / 2) + 'px';
   });
 }
 
-// Initial layout
-requestAnimationFrame(() => {
-  updateEdges();
-  // second pass to fix label widths
-  requestAnimationFrame(updateEdges);
-});
+requestAnimationFrame(() => { updateEdges(); requestAnimationFrame(updateEdges); });
 
-// ─── Drag logic ───
-let dragNode = null;
-let dragOffset = { x: 0, y: 0 };
+// ─── Drag ───
+let dragNode = null, dragOff = { x: 0, y: 0 };
 
-canvas.addEventListener('pointerdown', (e) => {
-  const nodeEl = e.target.closest('.node');
-  if (!nodeEl) return;
+canvas.addEventListener('pointerdown', e => {
+  const n = e.target.closest('.node');
+  if (!n) return;
   e.preventDefault();
-  dragNode = nodeEl;
+  dragNode = n;
   dragNode.classList.add('dragging');
   dragNode.setPointerCapture(e.pointerId);
-  const rect = canvas.getBoundingClientRect();
-  dragOffset.x = e.clientX - parseFloat(nodeEl.style.left) - rect.left;
-  dragOffset.y = e.clientY - parseFloat(nodeEl.style.top) - rect.top;
+  const r = canvas.getBoundingClientRect();
+  dragOff.x = e.clientX - parseFloat(n.style.left) - r.left;
+  dragOff.y = e.clientY - parseFloat(n.style.top) - r.top;
 });
 
-canvas.addEventListener('pointermove', (e) => {
+canvas.addEventListener('pointermove', e => {
   if (!dragNode) return;
   e.preventDefault();
-  const rect = canvas.getBoundingClientRect();
-  let nx = e.clientX - rect.left - dragOffset.x;
-  let ny = e.clientY - rect.top - dragOffset.y;
-  // Clamp
-  nx = Math.max(0, Math.min(rect.width - dragNode.offsetWidth, nx));
-  ny = Math.max(0, Math.min(rect.height - dragNode.offsetHeight, ny));
+  const r = canvas.getBoundingClientRect();
+  let nx = e.clientX - r.left - dragOff.x;
+  let ny = e.clientY - r.top - dragOff.y;
+  nx = Math.max(0, Math.min(r.width - dragNode.offsetWidth, nx));
+  ny = Math.max(0, Math.min(r.height - dragNode.offsetHeight, ny));
   dragNode.style.left = nx + 'px';
   dragNode.style.top = ny + 'px';
   updateEdges();
 });
 
 canvas.addEventListener('pointerup', () => {
-  if (dragNode) {
-    dragNode.classList.remove('dragging');
-    dragNode = null;
-  }
+  if (dragNode) { dragNode.classList.remove('dragging'); dragNode = null; }
 });
 
-// Resize handler
-window.addEventListener('resize', () => updateEdges());
+window.addEventListener('resize', updateEdges);
 </script>
-
 </body>
 </html>
