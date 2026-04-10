@@ -251,9 +251,9 @@ const edges = [
   { from: 'owner',   to: 'parent',  type: 's', label: 'Zero-Touch 모니터링',    curve: -20 },
   { from: 'owner',   to: 'insurer', type: 's', label: 'UBI 데이터 API',         curve: -20 },
   { from: 'owner',   to: 'govt',    type: 's', label: '면허반납 대시보드',       curve: -20 },
-  { from: 'aws',     to: 'owner',   type: 's', label: '클라우드 인프라',         curve: 20 },
-  { from: 'kakao',   to: 'owner',   type: 's', label: '알림 전송 API',          curve: 20 },
-  { from: 'map',     to: 'owner',   type: 's', label: '도로 제한속도',          curve: 20 },
+  { from: 'aws',     to: 'owner',   type: 's', label: '클라우드 인프라',         curve: 40, labelT: 0.3 },
+  { from: 'kakao',   to: 'owner',   type: 's', label: '알림 전송 API',          curve: 40, labelT: 0.3 },
+  { from: 'map',     to: 'owner',   type: 's', label: '도로 제한속도',          curve: 40, labelT: 0.3 },
   { from: 'kakao',   to: 'child',   type: 's', label: '카카오톡 알림 전달',     curve: 0, dash: false },
   { from: 'insurer', to: 'parent',  type: 's', label: '보험료 할인 혜택',       curve: 0, dash: true },
   { from: 'govt',    to: 'parent',  type: 's', label: '면허반납 바우처',         curve: 0, dash: true },
@@ -262,9 +262,9 @@ const edges = [
   { from: 'child',   to: 'owner',   type: 'r', label: '구독료 4,900~9,900/월',  curve: 20 },
   { from: 'insurer', to: 'owner',   type: 'r', label: 'B2B 제휴 수수료',        curve: 20 },
   { from: 'govt',    to: 'owner',   type: 'r', label: 'B2G 바우처 비용',        curve: 20 },
-  { from: 'owner',   to: 'aws',     type: 'r', label: '인프라 비용',            curve: -20 },
-  { from: 'owner',   to: 'kakao',   type: 'r', label: 'API 사용료',            curve: -20 },
-  { from: 'owner',   to: 'map',     type: 'r', label: 'API 라이선스',           curve: -20 },
+  { from: 'owner',   to: 'aws',     type: 'r', label: '인프라 비용',            curve: -20, labelT: 0.3 },
+  { from: 'owner',   to: 'kakao',   type: 'r', label: 'API 사용료',            curve: -20, labelT: 0.3 },
+  { from: 'owner',   to: 'map',     type: 'r', label: 'API 라이선스',           curve: -20, labelT: 0.3 },
 
   // === Data (green) ===
   { from: 'parent',  to: 'owner',   type: 'd', label: '운전 데이터 (자동 수집)', curve: 20 },
@@ -360,9 +360,10 @@ function updateEdges() {
     // Quadratic bezier
     path.setAttribute('d', `M ${fp.x} ${fp.y} Q ${cx} ${cy} ${tp.x} ${tp.y}`);
 
-    // Label at curve midpoint (t=0.5 on quadratic bezier)
-    const lx = 0.25 * fp.x + 0.5 * cx + 0.25 * tp.x;
-    const ly = 0.25 * fp.y + 0.5 * cy + 0.25 * tp.y;
+    // Label position along curve (t parameter, default 0.5)
+    const t = edge.labelT !== undefined ? edge.labelT : 0.5;
+    const lx = (1-t)*(1-t)*fp.x + 2*(1-t)*t*cx + t*t*tp.x;
+    const ly = (1-t)*(1-t)*fp.y + 2*(1-t)*t*cy + t*t*tp.y;
     lbl.style.left = (lx - lbl.offsetWidth / 2) + 'px';
     lbl.style.top = (ly - lbl.offsetHeight / 2) + 'px';
   });
